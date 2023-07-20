@@ -26,7 +26,6 @@ export default function useAuth({
   redirectIfFound = false,
 } = {}) {
   const { data: user, error, mutate } = useSWR(`${url}/me`, fetcher);
-
   useEffect(() => {
     if (error && redirectTo && !redirectIfFound) Router.push(redirectTo as any);
     if (user && redirectIfFound) Router.push(redirectTo as any);

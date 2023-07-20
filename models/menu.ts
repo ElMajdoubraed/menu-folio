@@ -22,7 +22,6 @@ const schema = new mongoose.Schema(
     },
     address: String,
     phone: String,
-    email: String,
   },
   {
     timestamps: true,

@@ -37,7 +37,7 @@ yarn-error.log*
 # Editors
 .vscode
 .idea
-
+.todo
 # ts watcher
 /.ts-node
 tsconfig.tsbuildinfo

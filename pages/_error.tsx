@@ -2,14 +2,14 @@ import { Button, Typography } from "@material-ui/core";
 import { Container, Paper } from "@mui/material";
 import Head from "next/head";
 
-export default function NotFound() {
+export default function Error() {
   return (
     <>
       <Head>
-        <title>الصفحة غير موجودة - MenuFolio</title>
+        <title>حدث خطأ ما - MenuFolio</title>
         <meta
           name="description"
-          content="للأسف لم نتمكن من العثور على الصفحة التي طلبتها. ما رأيك أن تجرب البحث بالموقع؟"
+          content="حدث خطأ ما، يرجى المحاولة مرة أخرى."
         />
       </Head>
       <Container
@@ -35,14 +35,11 @@ export default function NotFound() {
           }}
         >
           <Typography className="mb-5" variant="h5">
-            الصفحة غير موجودة
+            حدث خطأ ما
           </Typography>
-          <Typography variant="h1" className="mb-5" color="primary">
-            404
-          </Typography>
+
           <Typography className="mb-5">
-            للأسف لم نتمكن من العثور على الصفحة التي طلبتها. ما رأيك أن تجرب
-            البحث بالموقع؟
+            حدث خطأ ما، يرجى المحاولة مرة أخرى.
           </Typography>
 
           <Button variant="contained" color="primary" href="/">

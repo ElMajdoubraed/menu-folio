@@ -21,8 +21,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <SEO
-        title="MenuFolio - قم بإنشاء قائمة خاصة بك على الإنترنت"
-        description="MenuFolio هي أفضل طريقة لإنشاء قائمة خاصة بك على الإنترنت."
+        title="قم بإنشاء قائمة الطعام خاصة بك على الإنترنت - MenuFolio"
+        description="MenuFolio هي أفضل طريقة لإنشاء قائمة الطعام خاصة بك على الإنترنت."
         keywords={[
           "menu",
           "menu-folio",

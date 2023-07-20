@@ -8,6 +8,10 @@
   text-decoration: none;
 }
 
+.mb-5 {
+  margin-bottom: 1.5rem !important;
+}
+
 /*Recaptcha*/
 .recaptcha {
   width: 100% !important;

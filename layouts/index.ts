@@ -1,3 +1,5 @@
 import MainLayout from "./Main";
+import AuthLayout from "./Auth";
+import PageLayout from "./Page";
 
-export { MainLayout };
+export { MainLayout, AuthLayout, PageLayout };

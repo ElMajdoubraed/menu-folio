@@ -1,26 +1,19 @@
-import {
-  makeStyles,
-  Typography,
-  Container,
-  Link as MuiLink,
-} from "@material-ui/core";
+import { Typography, Container } from "@material-ui/core";
 import Link from "next/link";
 import { FormattedMessage } from "react-intl";
+import styled from "styled-components";
 
-const useStyles = makeStyles((theme) => ({
-  footer: {
-    marginTop: "auto",
-    borderTop: "1px solid #e0e0e0",
-    backgroundColor: "#1b1b1b",
-    padding: "20px",
-    color: "#d3af37",
-  },
-}));
+const FooterComponent = styled.footer`
+  margin-top: auto;
+  border-top: 1px solid #e0e0e0;
+  background-color: #1b1b1b;
+  padding: 20px;
+  color: #d3af37;
+`;
 
 export default function Footer() {
-  const classes = useStyles();
   return (
-    <footer className={classes.footer}>
+    <FooterComponent>
       <Container maxWidth="sm">
         <Typography component={"span"} variant="body2" align="center">
           <FormattedMessage id="copyright" />{" "}
@@ -29,6 +22,6 @@ export default function Footer() {
           </Link>
         </Typography>
       </Container>
-    </footer>
+    </FooterComponent>
   );
 }

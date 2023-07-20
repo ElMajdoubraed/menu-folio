@@ -57,9 +57,9 @@ export default function Header() {
 
 function GuestMenu() {
   return (
-    <Link href="/login" passHref>
+    <Link href="/auth/login" passHref>
       <Button color="inherit" variant="outlined">
-        <FormattedMessage id={"header.login"} />
+        <FormattedMessage id={"header.add"} />
       </Button>
     </Link>
   );
@@ -67,20 +67,17 @@ function GuestMenu() {
 
 function UserMenu(user: any) {
   const { logout } = useAuth({
-    redirectTo: "/login" as any,
+    redirectTo: "/auth/login" as any,
     redirectIfFound: false,
   });
   const router = useRouter();
   const [menu, setMenu] = useState(null);
   const [currentUser, setCurrentUser] = useState(user.user);
-  const [profilePicture, setProfilePicture] = useState("");
   const handleMenu = (event: any) => setMenu(event.currentTarget);
   const handleClose = () => setMenu(null);
 
   useEffect(() => {
     const currentUser = user.user;
-    const imageUrl = `${process.env.NEXT_PUBLIC_S3_UPLOAD_URL}/users/${currentUser.id}.png`;
-    setProfilePicture(imageUrl);
     setCurrentUser(currentUser);
   }, [user]);
 
@@ -99,7 +96,7 @@ function UserMenu(user: any) {
         onClick={handleMenu}
         color="inherit"
       >
-        <Avatar src={profilePicture}>{currentUser?.name?.charAt(0)}</Avatar>
+        <Avatar>{currentUser?.name?.charAt(0).toUpperCase()}</Avatar>
       </IconButton>
       <Menu
         id="menu-appbar"
@@ -117,8 +114,13 @@ function UserMenu(user: any) {
         open={Boolean(menu)}
         onClose={handleClose}
       >
-        <Link href="/profile" passHref>
+        <Link href="/admin/profile" passHref>
           <MenuItem>{currentUser?.name}</MenuItem>
+        </Link>
+        <Link href="/admin/dashboard" passHref>
+          <MenuItem style={{ color: "black" }}>
+            <FormattedMessage id="header.dashboard" />
+          </MenuItem>
         </Link>
         <MenuItem onClick={handleLogout}>
           <FormattedMessage id="header.logout" />
