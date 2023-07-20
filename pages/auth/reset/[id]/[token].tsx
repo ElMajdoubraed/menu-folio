@@ -6,10 +6,11 @@ import { Alert } from "@material-ui/lab";
 import { Snackbar } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
 import { PasswordInput } from "@/components/inputs";
-import { Button, Link as MuiLink } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { reset } from "@/hooks/useAuth";
 import axios from "axios";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme: any) => ({
   form: {
@@ -25,11 +26,11 @@ const useStyles = makeStyles((theme: any) => ({
   },
 }));
 
-export default function Reset({ params }: any) {
+export default function Reset() {
   const classes = useStyles();
+  const router = useRouter();
+  const { id, token } = router.query;
 
-  const token = params.token;
-  const id = params.id;
   const [hasError, setHasError] = useState(false);
   const [message, setMessage] = useState({ type: "", alert: "" });
   const [loading, setLoading] = useState(false);
@@ -160,10 +161,4 @@ export default function Reset({ params }: any) {
       </AuthLayout>
     </>
   );
-}
-
-export function getServerSideProps(context: any) {
-  return {
-    props: { params: context.params },
-  };
 }
