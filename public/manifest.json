@@ -1,12 +1,12 @@
 {
-  "theme_color": "#d3af37",
-  "background_color": "#d3af37",
+  "theme_color": "#D3AC2B",
+  "background_color": "#D3AC2B",
   "display": "fullscreen",
   "scope": "/",
   "start_url": "/",
-  "name": "Hsoub Finale - Raed elmajdoub",
-  "short_name": "Finale project",
-  "description": "Hsoub Finale - Raed elmajdoub",
+  "name": "Menufolio",
+  "short_name": "Menufolio",
+  "description": "Menufolio is a simple and easy to use menu for your restaurant.",
   "icons": [
     {
       "src": "/icon-192x192.png",

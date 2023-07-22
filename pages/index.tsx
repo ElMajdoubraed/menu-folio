@@ -1,4 +1,6 @@
-import { MainLayout } from "@/layouts";
+import { QrScanButton } from "@/components/button";
+import DemoDualAxes from "@/components/charts/Line";
+import DemoPie from "@/components/charts/Pie";
 import Head from "next/head";
 
 export default function Home() {
@@ -28,7 +30,9 @@ export default function Home() {
         <meta property="og:image" content="/icon-192x192.png" />
       </Head>
       <main>
-        <p>Hello</p>
+        <DemoPie />
+        <DemoDualAxes />
+        <QrScanButton />
       </main>
     </>
   );

@@ -19,7 +19,8 @@ import {
 } from "@mui/material";
 import { Button, IconButton, TextField, Typography } from "@material-ui/core";
 import { DeleteIcon } from "@/components/icons";
-import { TextInput } from "@/components/inputs";
+import { NoData } from "@/components/empty";
+import { TablePlaceHolder } from "@/components/skeletons";
 interface Order {
   name: string;
   quantity: number;
@@ -32,6 +33,7 @@ export default function GetOrders() {
 
   const calculateTotalPrice = () => {
     let total = 0;
+    if (!orders) return total;
     orders.forEach((order: Order) => {
       total += Number(order.quantity) * Number(order.price);
     });
@@ -65,77 +67,87 @@ export default function GetOrders() {
         <meta name="description" content="الطلبات - MenuFolio" />
       </Head>
       <PageLayout title="header.orders">
-        <TableContainer component={Paper}>
-          <Table
-            aria-label="Orders table"
-            sx={{
-              minWidth: "100%",
-              direction: "rtl",
-              ":lang": {
-                direction: "rtl",
-              },
-            }}
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell>الطلب</TableCell>
-                <TableCell>الكمية</TableCell>
-                <TableCell>السعر </TableCell>
-                <TableCell> السعر الجملي</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {map(orders, (order: Order, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell>{order.name}</TableCell>
-                    <TableCell>{order.quantity}</TableCell>
-                    <TableCell>{order.price}</TableCell>
-                    <TableCell>
-                      {Number(order.quantity) * Number(order.price)}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        float: "left",
-                      }}
-                    >
-                      <IconButton>
-                        <DeleteIcon size={20} fill="#FF0080" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Grid
-          sx={{
-            marginTop: "2rem",
-          }}
-          container
-          alignItems={"center"}
-          justifyContent={"center"}
-        >
-          <Grid item xs={12} md={3}>
-            <Button variant="contained" color="primary">
-              تأكيد الطلب
-            </Button>
-          </Grid>
-          <Grid item xs={12} md={5}>
-            <TextField
-              label="الاسم"
-              required
-              variant="outlined"
-              placeholder="الاسم"
-              onChange={() => {}}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Typography>السعر الجملي: {totalPrice}</Typography>
-          </Grid>
-        </Grid>
+        {orders ? (
+          orders.length > 0 ? (
+            <>
+              <TableContainer component={Paper}>
+                <Table
+                  aria-label="Orders table"
+                  sx={{
+                    minWidth: "100%",
+                    direction: "rtl",
+                    ":lang": {
+                      direction: "rtl",
+                    },
+                  }}
+                >
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>الطلب</TableCell>
+                      <TableCell>الكمية</TableCell>
+                      <TableCell>السعر </TableCell>
+                      <TableCell> السعر الجملي</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {map(orders, (order: Order, index) => {
+                      return (
+                        <TableRow key={index}>
+                          <TableCell>{order.name}</TableCell>
+                          <TableCell>{order.quantity}</TableCell>
+                          <TableCell>{order.price}</TableCell>
+                          <TableCell>
+                            {Number(order.quantity) * Number(order.price)}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              float: "left",
+                            }}
+                          >
+                            <IconButton>
+                              <DeleteIcon size={20} fill="#FF0080" />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Grid
+                sx={{
+                  marginTop: "2rem",
+                }}
+                container
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                <Grid item xs={12} md={3}>
+                  <Button variant="contained" color="primary">
+                    تأكيد الطلب
+                  </Button>
+                </Grid>
+                <Grid item xs={12} md={5}>
+                  <TextField
+                    label="الاسم"
+                    required
+                    variant="outlined"
+                    placeholder="الاسم"
+                    onChange={() => {}}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Typography>السعر الجملي: {totalPrice}</Typography>
+                </Grid>
+              </Grid>
+            </>
+          ) : (
+            <NoData description="لا توجد طلبات بعد" />
+          )
+        ) : (
+          <TablePlaceHolder />
+        )}
       </PageLayout>
     </>
   );
