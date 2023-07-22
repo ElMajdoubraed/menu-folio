@@ -12,6 +12,41 @@
   margin-bottom: 1.5rem !important;
 }
 
+a {
+  text-decoration: none;
+  color: #333d51;
+}
+
+/* table styling */
+
+table {
+  justify-content: center;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+table tr th,
+table tr td {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+thead {
+  background-color: #333d51;
+}
+
+thead tr th {
+  color: white !important;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* end table styling */
+
 /*Recaptcha*/
 .recaptcha {
   width: 100% !important;

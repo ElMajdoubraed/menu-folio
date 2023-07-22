@@ -5,10 +5,9 @@ import styled from "styled-components";
 
 const FooterComponent = styled.footer`
   margin-top: auto;
-  border-top: 1px solid #e0e0e0;
-  background-color: #1b1b1b;
+  background-color: #cbd0d8;
   padding: 20px;
-  color: #d3af37;
+  color: #333d51;
 `;
 
 export default function Footer() {

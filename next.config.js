@@ -2,10 +2,11 @@
 const withPWA = require("next-pwa");
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   optimizeFonts: true,
   images: {
     domains: ["example.s3.us-west-2.amazonaws.com"],
+    unoptimized: true,
   },
   typescript: {
     ignoreBuildErrors: true,
@@ -16,6 +17,20 @@ const nextConfig = {
   compiler: {
     removeConsole: false,
     styledComponents: true,
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback.fs = false;
+    }
+    return config;
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/robots.txt",
+        destination: "/api/robots",
+      },
+    ];
   },
 };
 

@@ -8,7 +8,7 @@ const schema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "cancelled", "completed"],
+      enum: ["قيد الانتظار", "ملغي", "مكتمل"],
     },
     items: [
       {
@@ -28,7 +28,6 @@ const schema = new mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Restaurant",
     },
-    description: String,
   },
   {
     timestamps: true,

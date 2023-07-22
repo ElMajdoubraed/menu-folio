@@ -3,7 +3,140 @@
     page list orders ili fil local storage ll user l 3edi
     */
 }
+import Head from "next/head";
+import { PageLayout } from "@/layouts";
+import { useState, useEffect } from "react";
+import { map } from "lodash";
+import {
+  Table,
+  TableContainer,
+  Paper,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+  Grid,
+} from "@mui/material";
+import { Button, IconButton, TextField, Typography } from "@material-ui/core";
+import { DeleteIcon } from "@/components/icons";
+import { TextInput } from "@/components/inputs";
+interface Order {
+  name: string;
+  quantity: number;
+  price: number;
+}
 
-export default function ListOrders() {
-  return <div>list orders</div>;
+export default function GetOrders() {
+  const [orders, setOrders] = useState([]) as any;
+  const [totalPrice, setTotalPrice] = useState(0) as any;
+
+  const calculateTotalPrice = () => {
+    let total = 0;
+    orders.forEach((order: Order) => {
+      total += Number(order.quantity) * Number(order.price);
+    });
+    return total;
+  };
+  useEffect(() => {
+    //api call to get orders by menu id
+    setOrders([
+      {
+        name: "kabeb",
+        quantity: 2,
+        price: 1.9,
+      },
+      {
+        name: "kofta",
+        quantity: 6,
+        price: 19.2,
+      },
+      {
+        name: "chicken",
+        quantity: 2,
+        price: 10,
+      },
+    ]);
+    setTotalPrice(calculateTotalPrice());
+  }, [totalPrice]);
+  return (
+    <>
+      <Head>
+        <title>الطلبات - MenuFolio</title>
+        <meta name="description" content="الطلبات - MenuFolio" />
+      </Head>
+      <PageLayout title="header.orders">
+        <TableContainer component={Paper}>
+          <Table
+            aria-label="Orders table"
+            sx={{
+              minWidth: "100%",
+              direction: "rtl",
+              ":lang": {
+                direction: "rtl",
+              },
+            }}
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell>الطلب</TableCell>
+                <TableCell>الكمية</TableCell>
+                <TableCell>السعر </TableCell>
+                <TableCell> السعر الجملي</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {map(orders, (order: Order, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{order.name}</TableCell>
+                    <TableCell>{order.quantity}</TableCell>
+                    <TableCell>{order.price}</TableCell>
+                    <TableCell>
+                      {Number(order.quantity) * Number(order.price)}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        float: "left",
+                      }}
+                    >
+                      <IconButton>
+                        <DeleteIcon size={20} fill="#FF0080" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Grid
+          sx={{
+            marginTop: "2rem",
+          }}
+          container
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          <Grid item xs={12} md={3}>
+            <Button variant="contained" color="primary">
+              تأكيد الطلب
+            </Button>
+          </Grid>
+          <Grid item xs={12} md={5}>
+            <TextField
+              label="الاسم"
+              required
+              variant="outlined"
+              placeholder="الاسم"
+              onChange={() => {}}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Typography>السعر الجملي: {totalPrice}</Typography>
+          </Grid>
+        </Grid>
+      </PageLayout>
+    </>
+  );
 }

@@ -11,10 +11,6 @@ export default class MyDocument extends Document {
           <link rel="manifest" href="/manifest.json" />
           <link rel="apple-touch-icon" href="/favicon.ico"></link>
           <meta name="theme-color" content={theme.palette.primary.main} />
-          <meta
-            name="google-site-verification"
-            content="dWVRIzh9U4frx8tVMDJclN8BFod_WyilpkSHrMUCugU"
-          />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
             href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap"
