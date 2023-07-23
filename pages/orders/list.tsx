@@ -1,8 +1,3 @@
-{
-  /*
-    page list orders ili fil local storage ll user l 3edi
-    */
-}
 import Head from "next/head";
 import { PageLayout } from "@/layouts";
 import { useState, useEffect } from "react";

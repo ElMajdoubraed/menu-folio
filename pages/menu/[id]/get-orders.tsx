@@ -109,7 +109,7 @@ export default function GetOrders() {
                         {order.status}
                       </StyledBadge>
                     </TableCell>
-                    <TableCell>{moment(order.time).format("LLLL")}</TableCell>
+                    <TableCell>{moment(order.time).fromNow()}</TableCell>
                     <TableCell
                       sx={{
                         float: "left",

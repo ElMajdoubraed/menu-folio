@@ -58,7 +58,7 @@ export default function Header() {
 function GuestMenu() {
   return (
     <Link href="/auth/login" passHref>
-      <Button color="inherit" variant="outlined">
+      <Button id="menu__btn" color="inherit" variant="outlined">
         <FormattedMessage id={"header.add"} />
       </Button>
     </Link>

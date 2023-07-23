@@ -5,10 +5,24 @@ const schema = new mongoose.Schema(
     name: {
       type: String,
       required: false,
+      trim: true,
+      uppercase: true,
     },
     status: {
       type: String,
       enum: ["قيد الانتظار", "ملغي", "مكتمل"],
+    },
+    variant: {
+      type: String,
+      enum: ["pending", "completed", "cancelled"],
+      default: "pending",
+      description: "Used to determine the variant of the order badge",
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+      min: 0,
+      default: 0,
     },
     items: [
       {
