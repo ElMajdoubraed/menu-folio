@@ -28,9 +28,9 @@ export default function OrderButton() {
   const [orders, setOrders] = useState(0);
   const [fetching, setFetching] = useState(false);
   useEffect(() => {
-    const orders = localStorage.getItem("orders");
-    if (orders) {
-      setOrders(JSON.parse(orders).length);
+    const orders: any = JSON.parse(localStorage.getItem("orders") || "null");
+    if (orders && orders.items) {
+      setOrders(orders.items.length);
     }
   }, [fetching]);
 

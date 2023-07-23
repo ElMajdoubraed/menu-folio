@@ -39,7 +39,7 @@ export default function Menu() {
       <PageLayout title="title.menu">
         <Grid.Container gap={2} justify="flex-start">
           {map(items, (item: any, index: number) => (
-            <Grid xs={6} sm={3} key={index}>
+            <Grid xs={12} sm={6} md={3} key={index}>
               <ItemMenuCard {...item} />
             </Grid>
           ))}

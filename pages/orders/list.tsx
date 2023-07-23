@@ -118,13 +118,16 @@ export default function GetOrders() {
                 alignItems={"center"}
                 justifyContent={"center"}
               >
-                <Grid item xs={12} md={3}>
-                  <Button variant="contained" color="primary">
-                    تأكيد الطلب
-                  </Button>
-                </Grid>
-                <Grid item xs={12} md={5}>
+                <Grid
+                  item
+                  sx={{
+                    marginBottom: "1rem",
+                  }}
+                  xs={12}
+                  md={5}
+                >
                   <TextField
+                    fullWidth
                     label="الاسم"
                     required
                     variant="outlined"
@@ -132,8 +135,22 @@ export default function GetOrders() {
                     onChange={() => {}}
                   />
                 </Grid>
-                <Grid item xs={12} md={4}>
-                  <Typography>السعر الجملي: {totalPrice}</Typography>
+                <Grid
+                  sx={{
+                    marginBottom: "1rem",
+                  }}
+                  item
+                  xs={12}
+                  md={4}
+                >
+                  <Typography align="center">
+                    السعر الجملي: {totalPrice}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <Button variant="contained" fullWidth color="primary">
+                    تأكيد الطلب
+                  </Button>
                 </Grid>
               </Grid>
             </>

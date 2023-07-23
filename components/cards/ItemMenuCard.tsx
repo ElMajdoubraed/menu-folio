@@ -6,21 +6,28 @@ import { Card, Row, Text, Button, Container } from "@nextui-org/react";
 import { message } from "antd";
 
 export default function ItemMenuCard({ name, price, image, id }: Item) {
-  const [quantity, setQuantity] = React.useState(0);
+  const [quantity, setQuantity] = React.useState(1);
   const orderHandler = () => {
-    const currentOrder = localStorage.getItem("order");
+    const currentOrder = localStorage.getItem("orders");
     if (currentOrder) {
       const parsedOrder = JSON.parse(currentOrder);
       const newOrder = {
         ...parsedOrder,
         items: [...parsedOrder.items, { id, quantity }],
       };
-      localStorage.setItem("order", JSON.stringify(newOrder));
+      // clean the order from duplicate items
+      const filteredOrder = newOrder.items
+        .reverse()
+        .filter(
+          (item: any, index: number, self: any) =>
+            index === self.findIndex((t: any) => t.id === item.id)
+        );
+      localStorage.setItem("orders", JSON.stringify({ items: filteredOrder }));
     } else {
       const newOrder = {
         items: [{ id, quantity }],
       };
-      localStorage.setItem("order", JSON.stringify(newOrder));
+      localStorage.setItem("orders", JSON.stringify(newOrder));
     }
     message.success("تمت الإضافة إلى السلة بنجاح");
   };
@@ -73,6 +80,7 @@ export default function ItemMenuCard({ name, price, image, id }: Item) {
             الكمية: {quantity}
           </Typography>
           <Button
+            disabled={quantity <= 0}
             auto
             color="gradient"
             bordered
@@ -82,6 +90,7 @@ export default function ItemMenuCard({ name, price, image, id }: Item) {
           </Button>
         </Stack>
         <Button
+          disabled={quantity <= 0}
           onClick={orderHandler}
           css={{
             marginTop: "1rem",
