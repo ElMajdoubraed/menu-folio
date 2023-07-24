@@ -1,8 +1,10 @@
 import dbConnect from "@/utils/dbConnect";
 import User from "@/models/user";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { EmailSubject, EmailTemplate } from "@/constants/emails/ForgetPassword";
 import sendEmail from "@/helpers/sendEmail";
 import jwt from "jsonwebtoken";
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     await dbConnect();
@@ -22,15 +24,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             expiresIn,
           }
         );
-        const messageTemplate = `يبدو أنك نسيت كلمة المرور الخاصة بحسوب .
-         إذا كان هذا صحيحًا ، فانقر فوق الارتباط أدناه لإعادة تعيين كلمة المرور الخاصة بك.`;
+
         const link = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset/${user.id}/${result}`;
-        const message = sendEmail(
-          email,
-          link,
-          "رابط إعادة تعيين كلمة المرور",
-          messageTemplate
-        );
+        const body = EmailTemplate(link);
+        const message = await sendEmail(email, EmailSubject, body);
+        if (message === undefined || message === null) {
+          res.status(500).json({
+            message: "حدث خطأ أثناء إرسال البريد الإلكتروني",
+          });
+          return;
+        }
         res.status(200).json(message);
       }
     } catch (error) {

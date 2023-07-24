@@ -1,7 +1,7 @@
 import { Fab, Tooltip } from "@material-ui/core";
 import { QrCode2 } from "@mui/icons-material";
 import styled from "styled-components";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { QrReader } from "react-qr-reader";
 import { Modal } from "@nextui-org/react";
 import { message } from "antd";
@@ -39,8 +39,7 @@ export default function QrScanButton() {
         const menuUrl = link.split("https://menu.elmajdoub.live")[1];
         router.push(menuUrl);
       } else {
-        message.error("حدث خطأ أثناء التحقق من القائمة");
-        setOpen(false);
+        setError("حدث خطأ أثناء التحقق من القائمة");
       }
     } catch (error) {
       message.error("حدث خطأ أثناء التحقق من القائمة");
@@ -89,9 +88,6 @@ export default function QrScanButton() {
               );
             }
           }}
-          //this is facing mode : "environment " it will open backcamera of the smartphone and if not found will
-          // open the front camera
-          style={{ width: "40%", height: "40%" }}
           constraints={{ facingMode: "environment" }}
         />
 

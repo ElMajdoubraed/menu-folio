@@ -10,6 +10,7 @@ import { forget } from "@/hooks/useAuth";
 import { Typography, Box } from "@mui/material";
 import { Alert } from "@material-ui/lab";
 import ReCAPTCHA from "react-google-recaptcha";
+import { message } from "antd";
 
 const useStyles = makeStyles((theme: any) => ({
   form: {
@@ -35,10 +36,15 @@ export default function Register() {
     try {
       if (verified === null) {
         setHasError(true);
-        alert("الرجاء التحقق من صحة الريكابتشا أولاً وإعادة المحاولة مرة أخرى");
+        message.error(
+          "الرجاء التحقق من صحة الريكابتشا أولاً وإعادة المحاولة مرة أخرى"
+        );
       } else {
+        message.loading("جاري إرسال رابط إعادة تعيين كلمة المرور");
         await forget({ email });
-        alert("تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني");
+        message.success(
+          "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني"
+        );
       }
     } catch (e) {
       setHasError(true);

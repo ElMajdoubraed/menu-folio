@@ -11,6 +11,7 @@ import { register } from "@/hooks/useAuth";
 import { Typography, Box } from "@mui/material";
 import { Alert } from "@material-ui/lab";
 import ReCAPTCHA from "react-google-recaptcha";
+import { message } from "antd";
 
 const useStyles = makeStyles((theme: any) => ({
   form: {
@@ -39,7 +40,9 @@ export default function Register() {
     try {
       if (verified === null) {
         setHasError(true);
-        alert("الرجاء التحقق من صحة الريكابتشا أولاً وإعادة المحاولة مرة أخرى");
+        message.error(
+          "الرجاء التحقق من صحة الريكابتشا أولاً وإعادة المحاولة مرة أخرى"
+        );
       } else {
         await register({ name, email, password });
         router.push("/");

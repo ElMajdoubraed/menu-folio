@@ -1,32 +1,30 @@
 import nodemailer from "nodemailer";
 
-function sendEmail(email: string, link: string, subject: string, body: string) {
+const user = process.env.EMAIL_ADDRESS;
+const pass = process.env.EMAIL_APP_PASSWORD;
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.zoho.com",
+  secure: true,
+  port: 465,
+  auth: { user, pass },
+});
+
+async function sendEmail(email: string, subject: string, body: string) {
   const message = {
     to: email,
-    from: process.env.EMAIL_ADDRESS,
+    from: user,
     subject: subject,
-    html: `<p>${body}</p>`,
+    html: body,
   };
-
-  let transporter = nodemailer.createTransport({
-    host: "smtp.titan.email",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_ADDRESS,
-      pass: process.env.EMAIL_APP_PASSWORD,
-    },
-  });
-
-  transporter.sendMail(message, (err: any, info: any) => {
+  await transporter.sendMail(message, (err: any, info: any) => {
     if (err) {
-      return {
-        error: `Connection refused at ${err}`,
-      };
+      throw err;
     } else {
       return { success: `Message delivered to ${info.accepted}` };
     }
   });
+  return message;
 }
 
 export default sendEmail;
