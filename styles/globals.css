@@ -78,15 +78,26 @@ canvas {
   direction: ltr !important;
 }
 
+.category__button {
+  position: fixed !important;
+  max-width: 100% !important;
+}
 @media only screen and (max-width: 900px) {
   * {
     max-width: 100% !important;
   }
-  button:not(#menu__btn) {
+  button:not(#menu__btn, .icon__btn) {
     width: 100% !important;
     margin-bottom: 1.5rem !important;
   }
+  .icon__btn {
+    margin-top: -20px !important;
+  }
   .ck {
     max-width: 100vh !important;
+  }
+  .category__button {
+    position: relative !important;
+    width: 100% !important;
   }
 }

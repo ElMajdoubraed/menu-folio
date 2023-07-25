@@ -11,6 +11,8 @@ const schema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["قيد الانتظار", "ملغي", "مكتمل"],
+      default: "قيد الانتظار",
+      description: "Used to determine the status of the order",
     },
     variant: {
       type: String,

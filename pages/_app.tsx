@@ -12,7 +12,21 @@ import { MainLayout } from "@/layouts";
 import PropTypes from "prop-types";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
+import { Offline } from "@/components/empty";
 export default function App({ Component, pageProps }: AppProps) {
+  const [isOnline, setIsOnline] = React.useState(true);
+  React.useEffect(() => {
+    const handleStatusChange = () => {
+      setIsOnline(navigator.onLine);
+    };
+    window.addEventListener("online", handleStatusChange);
+    window.addEventListener("offline", handleStatusChange);
+    return () => {
+      window.removeEventListener("online", handleStatusChange);
+      window.removeEventListener("offline", handleStatusChange);
+    };
+  }, [isOnline]);
+
   React.useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
@@ -77,8 +91,14 @@ export default function App({ Component, pageProps }: AppProps) {
           <RTL>
             <CssBaseline />
             <MainLayout>
-              <Component {...pageProps} />
-              <Analytics />
+              {!isOnline ? (
+                <Offline />
+              ) : (
+                <>
+                  <Component {...pageProps} />
+                  <Analytics />
+                </>
+              )}
             </MainLayout>
           </RTL>
         </IntlProvider>
