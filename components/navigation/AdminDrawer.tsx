@@ -3,6 +3,7 @@ import { red } from "@material-ui/core/colors";
 import { Close, Edit, Delete } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
 import { Button, Drawer } from "antd";
+import React from "react";
 
 const AdminDrawerComponent = (props: any) => {
   return (
@@ -39,7 +40,7 @@ const AdminDrawerComponent = (props: any) => {
           />
         </IconButton>
         {props.items.map((item: any, index: number) => (
-          <>
+          <React.Fragment key={index}>
             <Box
               sx={{
                 width: "100%",
@@ -70,7 +71,6 @@ const AdminDrawerComponent = (props: any) => {
                   <Delete color="error" fontSize="small" />
                 </IconButton>
                 <Button
-                  key={index}
                   style={{
                     width: "100%",
                     marginBottom: 10,
@@ -90,7 +90,7 @@ const AdminDrawerComponent = (props: any) => {
                 marginBottom: 10,
               }}
             />
-          </>
+          </React.Fragment>
         ))}
       </Box>
     </Drawer>
