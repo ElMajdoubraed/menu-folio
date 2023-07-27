@@ -93,6 +93,12 @@ const MenuDetailsCard = (props: any) => {
         >
           <Canvas
             text={props.link}
+            logo={{
+              src: "/images/qr-bg.jpg",
+              options: {
+                width: 40,
+              },
+            }}
             options={{
               type: "image/jpeg",
               quality: 0.3,

@@ -57,7 +57,7 @@ export default function Header() {
 
 function GuestMenu() {
   return (
-    <Link href="/auth/login" passHref>
+    <Link href="/admin/add" passHref>
       <Button id="menu__btn" color="inherit" variant="outlined">
         <FormattedMessage id={"header.add"} />
       </Button>
@@ -120,6 +120,11 @@ function UserMenu(user: any) {
         <Link href="/admin/dashboard" passHref>
           <MenuItem style={{ color: "black" }}>
             <FormattedMessage id="header.dashboard" />
+          </MenuItem>
+        </Link>
+        <Link href="/admin/add" passHref>
+          <MenuItem style={{ color: "black" }}>
+            <FormattedMessage id={"header.addItem"} />
           </MenuItem>
         </Link>
         <MenuItem onClick={handleLogout}>

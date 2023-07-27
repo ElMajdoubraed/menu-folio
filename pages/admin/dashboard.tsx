@@ -12,8 +12,13 @@ import { useState } from "react";
 import { map } from "lodash";
 import { Grid } from "@mui/material";
 import { MenuDetailsCard } from "@/components/cards";
+import useAuth from "@/hooks/useAuth";
 
 export default function Dashboard() {
+  const { user } = useAuth({
+    redirectTo: "/auth/login" as any,
+    redirectIfFound: false,
+  });
   const [menus, setMenus] = useState([
     {
       name: "menu1",

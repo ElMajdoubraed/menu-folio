@@ -19,6 +19,7 @@ async function sendEmail(email: string, subject: string, body: string) {
   };
   await transporter.sendMail(message, (err: any, info: any) => {
     if (err) {
+      console.error("Error sending email: ", err);
       throw err;
     } else {
       return { success: `Message delivered to ${info.accepted}` };

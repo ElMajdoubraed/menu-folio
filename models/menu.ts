@@ -12,8 +12,6 @@ const schema = new mongoose.Schema(
     description: String,
     link: {
       type: String,
-      required: true,
-      unique: true,
       trim: true,
     },
     owner: {
@@ -32,7 +30,7 @@ schema.pre("save", function (next) {
   if (this.link) {
     return next();
   }
-  this.link = this._id.toString();
+  this.link = `/menu/${this._id.toString()}`;
   next();
 });
 

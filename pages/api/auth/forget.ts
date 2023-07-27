@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       } else {
         const data = { id: user._id };
-        const expiresIn = "5m";
+        const expiresIn = "25m";
         const result = jwt.sign(
           data,
           (user.password + process.env.JWT_SECRET) as string,
@@ -61,8 +61,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(200).json({});
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).json({});
+      res.status(500).json({
+        error,
+      });
     }
   } else if (req.method === "GET") {
     const { token, id } = req.query;
