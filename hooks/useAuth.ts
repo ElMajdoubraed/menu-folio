@@ -3,6 +3,10 @@ import { useEffect } from "react";
 import useSWR from "swr";
 import Router from "next/router";
 
+interface IAuth {
+  redirectTo?: string | boolean;
+  redirectIfFound?: boolean;
+}
 const url = "/api/auth";
 
 export const login = (params: object) => axios.post(`${url}/login`, params);
@@ -24,7 +28,7 @@ const fetcher = (url: string) =>
 export default function useAuth({
   redirectTo = false,
   redirectIfFound = false,
-} = {}) {
+}: IAuth = {}) {
   const { data: user, error, mutate } = useSWR(`${url}/me`, fetcher);
   useEffect(() => {
     if (error && redirectTo && !redirectIfFound) Router.push(redirectTo as any);

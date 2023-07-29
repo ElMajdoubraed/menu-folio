@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+const Category = require("./category");
+const Restaurant = require("./menu");
 
 const schema = new mongoose.Schema(
   {

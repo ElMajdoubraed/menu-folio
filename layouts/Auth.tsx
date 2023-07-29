@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: any) => ({
 
 export default function Auth({ children, width = "xs" }: any) {
   useAuth({
-    redirectTo: "/" as any,
+    redirectTo: "/",
     redirectIfFound: true,
   });
   const classes = useStyles();

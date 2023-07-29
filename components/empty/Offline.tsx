@@ -44,6 +44,7 @@ const Offline: React.FC = () => (
         }
         extra={[
           <Button
+            key="reload"
             style={{
               marginTop: "2rem",
             }}

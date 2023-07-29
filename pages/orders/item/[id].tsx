@@ -2,26 +2,44 @@ import { PageLayout } from "@/layouts";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import moment from "@/utils/moment";
 import { Box, Typography } from "@material-ui/core";
 import { Stack } from "@mui/material";
 import { ItemDetailsCard } from "@/components/cards";
-import ItemDetails from "@/types/item";
+import axios from "axios";
+import { message } from "antd";
 export default function GetItem() {
   const router = useRouter();
   const { id } = router.query;
   const [item, setItem] = useState({
-    name: "Kosksi",
-    price: 10,
-    description:
-      "Kosksi is a tunisian food that is very delicious and tasty with a lot of spices and vegetables and meat.",
-    image:
-      "https://www.tunisie.fr/wp-content/uploads/2020/11/couscous-aux-cardons-e1358522791731.jpg",
-    nameCategory: " فئة  1",
-    nameMenu: "منيو 1",
-    imageMenu:
-      "https://img.freepik.com/premium-vector/restaurant-logo-design-template_79169-56.jpg?w=2000",
+    name: "",
+    price: 0,
+    description: "",
+    image: "",
+    nameCategory: "",
+    nameMenu: "",
+    imageMenu: "",
   });
+  useEffect(() => {
+    if (!id) return;
+    axios
+      .get(`/api/item/${id}/get`)
+      .then((res) => {
+        const item = res.data?.item;
+        if (!item) return;
+        setItem({
+          name: item.name,
+          price: item.price,
+          description: item.description,
+          image: item.image,
+          nameCategory: item.category?.name,
+          nameMenu: item.menu?.name,
+          imageMenu: item.menu?.logo,
+        });
+      })
+      .catch((err) => {
+        message.error("حدث خطأ أثناء جلب معطيات العنصر");
+      });
+  }, [id]);
   return (
     <>
       <Head>
@@ -30,8 +48,8 @@ export default function GetItem() {
       </Head>
       <PageLayout title="title.item-data">
         <Stack
-          direction="row"
-          spacing={10}
+          direction={{ xs: "column", sm: "row" }}
+          spacing={{ xs: 1, sm: 2, md: 10 }}
           sx={{
             marginBottom: "2rem",
           }}

@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+const Item = require("./item");
 
-const schema = new mongoose.Schema(
+const { Schema } = mongoose;
+const schema = new Schema(
   {
     name: {
       type: String,
@@ -57,5 +59,16 @@ schema.virtual("id").get(function () {
 schema.set("toJSON", {
   virtuals: true,
 });
+
+schema.statics.getOrders = async function (menu: string) {
+  const orders = await this.find({
+    menu,
+    variant: "pending",
+  })
+    .populate("items.item")
+    .exec();
+
+  return orders;
+};
 
 export default mongoose.models.Order || mongoose.model("Order", schema);

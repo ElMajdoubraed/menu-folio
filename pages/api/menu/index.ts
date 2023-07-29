@@ -1,8 +1,10 @@
 import auth from "@/utils/auth";
 import Menu from "@/models/menu";
 import type { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/utils/dbConnect";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  await dbConnect();
   const user = req.user.id;
   switch (req.method) {
     case "GET":
@@ -11,8 +13,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
       res.status(200).json({
         success: true,
-        data: menus,
+        menus,
       });
+      break;
     case "POST":
       if (!user)
         return res.status(401).json({
@@ -35,12 +38,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         success: true,
         message: "Menu created successfully",
       });
-
+      break;
     default:
       res.status(405).json({
         success: false,
         message: "Method not allowed",
       });
+      break;
   }
 };
 

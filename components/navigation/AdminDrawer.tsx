@@ -2,10 +2,28 @@ import { Box, Divider } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import { Close, Edit, Delete } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
-import { Button, Drawer } from "antd";
+import { Button, Drawer, message } from "antd";
+import axios from "axios";
 import React from "react";
 
 const AdminDrawerComponent = (props: any) => {
+  const deleteHandler = (id: string) => {
+    if (!id) return;
+    if (!window.confirm("هل انت متأكد من حذف هذا التصنيف؟")) return;
+    message.loading("جاري حذف التصنيف");
+    axios
+      .delete(`/api/category/${id}?menu=${props.menuId}`)
+      .then((res) => {
+        message.success("تم حذف التصنيف بنجاح");
+        window.location.reload();
+      })
+      .catch((err) => {
+        message.error("حدث خطأ أثناء حذف التصنيف");
+      });
+  };
+  const updateHandler = (id: string) => {
+    if (!id) return;
+  };
   return (
     <Drawer
       title="التصنيفات"
@@ -39,7 +57,7 @@ const AdminDrawerComponent = (props: any) => {
             }}
           />
         </IconButton>
-        {props.items.map((item: any, index: number) => (
+        {props.items?.map((item: any, index: number) => (
           <React.Fragment key={index}>
             <Box
               sx={{
@@ -66,7 +84,7 @@ const AdminDrawerComponent = (props: any) => {
                 {"  "}
                 <IconButton
                   className="icon__btn"
-                  onClick={() => console.log("delete")}
+                  onClick={() => deleteHandler(item._id)}
                 >
                   <Delete color="error" fontSize="small" />
                 </IconButton>

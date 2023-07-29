@@ -38,7 +38,7 @@ const DrawerComponent = (props: any) => {
             }}
           />
         </IconButton>
-        {props.items.map((item: any, index: number) => (
+        {props.items?.map((item: any, index: number) => (
           <Button
             key={index}
             style={{

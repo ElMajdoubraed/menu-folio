@@ -4,12 +4,18 @@ import dbConnect from "./dbConnect";
 import jwt from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+interface DecodedInterface {
+  id: string;
+  iat: number;
+  exp: number;
+}
+
 async function check(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
-  const decoded: any = jwt.verify(
+  const decoded: DecodedInterface = jwt.verify(
     req.cookies?.accessToken as string,
     process.env.JWT_SECRET as string
-  );
+  ) as DecodedInterface;
   if (decoded?.id) {
     const user = await User.findById(decoded.id);
     if (user) return user;
@@ -18,7 +24,7 @@ async function check(req: NextApiRequest, res: NextApiResponse) {
 }
 
 const auth =
-  (handler: any) => async (req: NextApiRequest, res: NextApiResponse) => {
+  (handler: Function) => async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       req.user = await check(req, res);
       return handler(req, res);
@@ -30,11 +36,14 @@ const auth =
     }
   };
 
-export const isOwner = async (menuId: any, userId: any) => {
+export const isOwner = async (
+  menuId: string | string[] | undefined,
+  userId: string
+) => {
   try {
     await dbConnect();
     const menu = await Menu.findById(menuId);
-    if (menu?.owner === userId) return true;
+    if (menu?.owner?.toString() === userId) return true;
     return false;
   } catch (error) {
     return false;

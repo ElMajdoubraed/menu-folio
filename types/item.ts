@@ -19,5 +19,6 @@ export interface Item {
   menu: string;
   id?: string;
   createdAt?: string;
+  menuId?: string;
   updatedAt?: string;
 }

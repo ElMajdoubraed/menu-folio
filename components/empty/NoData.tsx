@@ -3,6 +3,15 @@ import { Empty } from "antd";
 
 const NoData = (props: any) => (
   <Empty
+    style={{
+      margin: "auto",
+      marginTop: "5rem",
+      marginBottom: "5rem",
+      width: "100%",
+      height: "100%",
+      justifyContent: "center",
+      alignItems: "center",
+    }}
     description={
       <Typography
         style={{

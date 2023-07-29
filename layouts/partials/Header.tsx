@@ -67,7 +67,7 @@ function GuestMenu() {
 
 function UserMenu(user: any) {
   const { logout } = useAuth({
-    redirectTo: "/auth/login" as any,
+    redirectTo: "/auth/login",
     redirectIfFound: false,
   });
   const router = useRouter();

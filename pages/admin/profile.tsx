@@ -29,7 +29,7 @@ export default function Profile() {
   const classes = useStyles();
 
   const { user } = useAuth({
-    redirectTo: "/auth/login" as any,
+    redirectTo: "/auth/login",
     redirectIfFound: false,
   });
 

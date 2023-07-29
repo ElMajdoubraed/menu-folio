@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import Order from "@/models/order";
+import Item from "@/models/item";
+import auth, { isOwner } from "@/utils/auth";
 import dbConnect from "@/utils/dbConnect";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -10,18 +11,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   await dbConnect();
   try {
-    const { name, totalPrice, menu, items } = req.body;
+    const user = req.user.id;
+    const { name, price, description, image, category, menu } = req.body;
+    const isOwnerCheck = await isOwner(menu, user);
 
-    await Order.create({
+    if (!isOwnerCheck) {
+      return res.status(401).json({
+        success: false,
+        message: "You are not allowed create item in this menu",
+      });
+    }
+
+    await Item.create({
       name,
-      totalPrice,
+      price,
+      description,
+      image,
+      category,
       menu,
-      items,
     });
 
     res.status(201).json({
       success: true,
-      message: "Order created successfully",
+      message: "Item created successfully",
     });
   } catch (error) {
     res.status(500).json({
@@ -31,4 +43,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default handler;
+export default auth(handler);

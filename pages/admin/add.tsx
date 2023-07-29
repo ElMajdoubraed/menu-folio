@@ -22,7 +22,7 @@ export default function Add() {
   const [address, setAddress] = useState() as any;
 
   const { user } = useAuth({
-    redirectTo: "/auth/login" as any,
+    redirectTo: "/auth/login",
     redirectIfFound: false,
   });
 
@@ -32,9 +32,7 @@ export default function Add() {
         setLogo(event.target.files[0]);
         setLogoPreview(URL.createObjectURL(event.target.files[0]) as any);
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const AddMenu = async (e: any) => {

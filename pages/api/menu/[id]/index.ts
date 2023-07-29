@@ -4,10 +4,12 @@ import Category from "@/models/category";
 import Item from "@/models/item";
 import Order from "@/models/order";
 import type { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/utils/dbConnect";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  await dbConnect();
   const user = req.user.id;
-  const { id } = req.params;
+  const { id } = req.query;
   switch (req.method) {
     case "GET":
       const menu = await Menu.findOne({ owner: user, _id: id });
@@ -15,8 +17,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         success: true,
         menu,
       });
+      break;
     case "PUT":
-      const { name, description, address, phone, logo } = req.body;
+      const { name, description, address, phone } = req.body;
       await Menu.findOneAndUpdate(
         {
           owner: user,
@@ -27,8 +30,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           description,
           address,
           phone,
-          owner: user,
-          logo,
         }
       );
 
@@ -37,6 +38,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         message: "Menu updated successfully",
       });
 
+      break;
     case "DELETE":
       await Menu.deleteOne({ owner: user, _id: id });
       await Category.deleteMany({ menu: id });
@@ -46,12 +48,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         success: true,
         message: "Menu deleted successfully",
       });
-
+      break;
     default:
       res.status(405).json({
         success: false,
         message: "Method not allowed",
       });
+      break;
   }
 };
 

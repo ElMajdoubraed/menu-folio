@@ -16,45 +16,84 @@ import { Button, IconButton, TextField, Typography } from "@material-ui/core";
 import { DeleteIcon } from "@/components/icons";
 import { NoData } from "@/components/empty";
 import { TablePlaceHolder } from "@/components/skeletons";
+import { message } from "antd";
+import axios from "axios";
 interface Order {
   name: string;
   quantity: number;
   price: number;
 }
 
-export default function GetOrders() {
-  const [orders, setOrders] = useState([]) as any;
-  const [totalPrice, setTotalPrice] = useState(0) as any;
+const calculateTotalPrice = (orders: Order[]) => {
+  let total = 0;
+  if (!orders) return total;
+  orders.forEach((order: Order) => {
+    total += Number(order.quantity) * Number(order.price);
+  });
+  return total;
+};
 
-  const calculateTotalPrice = () => {
-    let total = 0;
-    if (!orders) return total;
-    orders.forEach((order: Order) => {
-      total += Number(order.quantity) * Number(order.price);
+export default function GetOrders() {
+  const [orders, setOrders] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [orderName, setOrderName] = useState("");
+
+  const handleDeleteOrder = (index: number) => {
+    if (window.confirm("هل أنت متأكد من حذف الطلب؟") === false) return;
+    const newOrders = orders.filter((order: Order, i: number) => {
+      return i !== index;
     });
-    return total;
+    if (newOrders.length === 0) {
+      localStorage.removeItem("orders");
+      localStorage.removeItem("menu");
+      setOrders([]);
+    } else {
+      setOrders(newOrders);
+      localStorage.setItem("orders", JSON.stringify(newOrders));
+    }
+
+    setTotalPrice(calculateTotalPrice(newOrders));
   };
+
+  const handleOrder = async () => {
+    if (!orderName) {
+      message.error("الرجاء إدخال اسم الطلب");
+      return;
+    }
+    if (orders.length === 0) {
+      message.error("الرجاء إضافة منتجات للطلب");
+      return;
+    }
+    console.log(orders);
+    await axios
+      .post("/api/order", {
+        name: orderName,
+        totalPrice,
+        items: orders,
+        menu: localStorage.getItem("menu"),
+      })
+      .then((res) => {
+        alert("تم إرسال الطلب بنجاح");
+        localStorage.removeItem("orders");
+        localStorage.removeItem("menu");
+        setOrders([]);
+        setTotalPrice(0);
+      })
+      .catch((err) => {
+        message.error("حدث خطأ أثناء إرسال الطلب");
+      });
+  };
+
   useEffect(() => {
-    //api call to get orders by menu id
-    setOrders([
-      {
-        name: "kabeb",
-        quantity: 2,
-        price: 1.9,
-      },
-      {
-        name: "kofta",
-        quantity: 6,
-        price: 19.2,
-      },
-      {
-        name: "chicken",
-        quantity: 2,
-        price: 10,
-      },
-    ]);
-    setTotalPrice(calculateTotalPrice());
-  }, [totalPrice]);
+    const localOrders = JSON.parse(localStorage.getItem("orders") || "null");
+    if (!localOrders) {
+      setOrders([]);
+      setTotalPrice(0);
+      return;
+    }
+    setOrders(localOrders?.items);
+    setTotalPrice(calculateTotalPrice(localOrders?.items));
+  }, []);
   return (
     <>
       <Head>
@@ -86,7 +125,7 @@ export default function GetOrders() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {map(orders, (order: Order, index) => {
+                    {map(orders, (order: Order, index: number) => {
                       return (
                         <TableRow key={index}>
                           <TableCell>{order.name}</TableCell>
@@ -100,7 +139,9 @@ export default function GetOrders() {
                               float: "left",
                             }}
                           >
-                            <IconButton>
+                            <IconButton
+                              onClick={() => handleDeleteOrder(index)}
+                            >
                               <DeleteIcon size={20} fill="#FF0080" />
                             </IconButton>
                           </TableCell>
@@ -132,7 +173,9 @@ export default function GetOrders() {
                     required
                     variant="outlined"
                     placeholder="الاسم"
-                    onChange={() => {}}
+                    onChange={(e) => {
+                      setOrderName(e.target.value);
+                    }}
                   />
                 </Grid>
                 <Grid
@@ -148,7 +191,12 @@ export default function GetOrders() {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} md={3}>
-                  <Button variant="contained" fullWidth color="primary">
+                  <Button
+                    onClick={handleOrder}
+                    variant="contained"
+                    fullWidth
+                    color="primary"
+                  >
                     تأكيد الطلب
                   </Button>
                 </Grid>

@@ -11,8 +11,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
     const user = req.user.id;
-    const { menu } = req.query;
-    const isOwnerCheck = await isOwner(menu, user);
+    const { id } = req.query;
+    const isOwnerCheck = await isOwner(id, user);
     if (!isOwnerCheck) {
       return res.status(401).json({
         success: false,
@@ -21,7 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const orders = await Order.find({
-      menu,
+      menu: id,
       variant: "pending",
     });
 

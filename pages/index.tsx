@@ -1,7 +1,15 @@
 import { QrScanButton } from "@/components/button";
-import DemoDualAxes from "@/components/charts/Line";
-import DemoPie from "@/components/charts/Pie";
+import { Grid } from "@mui/material";
+import { Container, Typography } from "@material-ui/core";
 import Head from "next/head";
+import {
+  FaqHome,
+  HowHome,
+  MainHome,
+  StartNowHome,
+  UseCaseHome,
+  WhyHome,
+} from "@/components/home";
 
 export default function Home() {
   return (
@@ -29,11 +37,15 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/icon-192x192.png" />
       </Head>
-      <main>
-        <DemoPie />
-        <DemoDualAxes />
+      <Container>
+        <MainHome />
+        <HowHome />
+        <UseCaseHome />
+        <WhyHome />
+        <FaqHome />
+        <StartNowHome />
         <QrScanButton />
-      </main>
+      </Container>
     </>
   );
 }

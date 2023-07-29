@@ -1,14 +1,14 @@
 import auth, { isOwner } from "@/utils/auth";
 import Category from "@/models/category";
 import type { NextApiRequest, NextApiResponse } from "next";
-
+import dbConnect from "@/utils/dbConnect";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
     return res.status(405).json({
       success: false,
       message: "Method not allowed",
     });
-
+  await dbConnect();
   const user = req.user.id;
   const { name, description, menu } = req.body;
   const isOwnerCheck = await isOwner(menu, user);

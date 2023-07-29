@@ -1,17 +1,18 @@
-import Category from "@/models/category";
+import Item from "@/models/item";
 import type { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/utils/dbConnect";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  await dbConnect();
   const { id } = req.query;
   switch (req.method) {
     case "GET":
       try {
-        const categories = await Category.find({
-          menu: id,
+        const items = await Item.find({
+          category: id,
         });
-
-        res.status(201).json({
-          categories,
+        res.status(200).json({
+          items,
           success: true,
         });
       } catch (error) {
@@ -21,7 +22,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
       break;
-
     default:
       return res.status(405).json({
         success: false,

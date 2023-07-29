@@ -9,6 +9,7 @@ import { red } from "@mui/material/colors";
 import { Card } from "@material-ui/core";
 import ItemDetails from "@/types/item";
 export default function ItemDetailsCard(props: ItemDetails) {
+  const uploadUrl = process.env.NEXT_PUBLIC_S3_UPLOAD_URL;
   return (
     <Card
       style={{
@@ -19,7 +20,10 @@ export default function ItemDetailsCard(props: ItemDetails) {
     >
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} src={props.imageMenu}>
+          <Avatar
+            sx={{ bgcolor: red[500] }}
+            src={`${uploadUrl}/${props.imageMenu}`}
+          >
             {props.nameMenu[0]}
           </Avatar>
         }
@@ -31,7 +35,7 @@ export default function ItemDetailsCard(props: ItemDetails) {
         sx={{
           maxHeight: "500px",
         }}
-        image={props.image}
+        image={`${uploadUrl}/${props.image}`}
         alt={props.name}
       />
       <CardContent>

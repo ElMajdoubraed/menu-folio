@@ -19,12 +19,14 @@ type TextInputProps = {
   defaultValue?: any;
   multiline?: boolean;
   onChange: (value: any) => void;
+  focused?: boolean;
   variant?: "filled" | "outlined" | "standard";
 };
 
 export default function TextInput({
   name,
   label,
+  focused,
   value = undefined,
   type,
   multiline,
@@ -44,6 +46,7 @@ export default function TextInput({
         variant={variant}
         type={type || "text"}
         value={value}
+        focused={focused}
         multiline={multiline || false}
         fullWidth
         defaultValue={defaultValue}

@@ -10,8 +10,16 @@ import { useEffect, useState } from "react";
 import { Alert } from "@material-ui/lab";
 import { map } from "lodash";
 import { useRouter } from "next/router";
+import { v4 as uuidv4 } from "uuid";
+import { uploadFile } from "@/hooks/useUpload";
+import axios from "axios";
+import useAuth from "@/hooks/useAuth";
 
 export default function AddItem() {
+  const { user } = useAuth({
+    redirectTo: "/auth/login",
+    redirectIfFound: false,
+  });
   const router = useRouter();
   const { id } = router.query;
   const [name, setName] = useState();
@@ -20,40 +28,38 @@ export default function AddItem() {
   const [image, setImage] = useState();
   const [imagePreview, setImagePreview] = useState();
   const [category, setCategory] = useState();
-  const [listCategories, setListCategories] = useState(["id", "name"]);
+  const [listCategories, setListCategories] = useState([]) as any;
   const [error, setError] = useState({
-    message: "لا يمكنك اضافة عنصر جديد ربما لانك لم تقم بانشاء قائمة طعام بعد",
-    exist: true,
+    message: "",
+    exist: false,
   });
 
   useEffect(() => {
-    //get menu from api
-    /* if (!menu) {
-        setError({
-            message: "لا يمكنك اضافة عنصر جديد ربما لانك لم تقم بانشاء قائمة طعام بعد",
+    if (!id) return;
+    axios
+      .get(`/api/menu/${id}/categories`)
+      .then((res) => {
+        setListCategories(res.data?.categories);
+        if (res.data?.categories?.length === 0) {
+          setError({
+            message: "لا يمكنك اضافة عنصر جديد لانك لم تقم بانشاء فئة طعام بعد",
             exist: true,
+          });
+        }
+      })
+      .catch((e) => {
+        setError({
+          message:
+            "لا يمكنك اضافة عنصر جديد ربما لانك لم تقم بانشاء قائمة طعام بعد",
+          exist: true,
         });
-    } */
-    //get categories from api
-    if (listCategories.length > 0) {
-      setError({
-        message: "لا يمكنك اضافة عنصر جديد لانك لم تقم بانشاء فئة طعام بعد",
-        exist: true,
       });
-    }
-  }, []);
+  }, [id]);
 
   const checkValidation = () => {
     if (!name || !price || !image || !category) {
       setError({
         message: "يجب ادخال جميع الحقول",
-        exist: true,
-      });
-      return false;
-    }
-    if (!listCategories.includes(category)) {
-      setError({
-        message: "يجب ادخال فئة صحيحة",
         exist: true,
       });
       return false;
@@ -65,6 +71,7 @@ export default function AddItem() {
       });
       return false;
     }
+    return true;
   };
 
   const imagePreviewHandler = (event: any) => {
@@ -73,12 +80,32 @@ export default function AddItem() {
         setImage(event.target.files[0]);
         setImagePreview(URL.createObjectURL(event.target.files[0]) as any);
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
-  const AddItemHandler = () => {
-    message.success("تم اضافة العنصر بنجاح");
+  const AddItemHandler = async () => {
+    const selectedCategory = listCategories.find(
+      (item: any) => item.name === category
+    );
+    if (!checkValidation()) return;
+    message.loading("جاري اضافة العنصر");
+    const uuid = uuidv4();
+    await uploadFile(image, `menu/${id}/items/${uuid}${".png"}`);
+    axios
+      .post("/api/item", {
+        name,
+        description,
+        price,
+        image: `menu/${id}/items/${uuid}${".png"}`,
+        category: selectedCategory._id,
+        menu: id,
+      })
+      .then((res) => {
+        message.success("تم اضافة العنصر بنجاح");
+        router.push(`/menu/${id}`);
+      })
+      .catch((e) => {
+        message.error("حدث خطأ ما");
+      });
   };
   return (
     <>
@@ -149,8 +176,8 @@ export default function AddItem() {
                 <em>فئة العنصر</em>
               </MenuItem>
               {map(listCategories, (category, index) => (
-                <MenuItem key={index} value={category}>
-                  {category}
+                <MenuItem key={index} id={category._id} value={category.name}>
+                  {category.name}
                 </MenuItem>
               ))}
             </Select>

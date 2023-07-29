@@ -12,7 +12,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "ts:w": "tsc -w"
   },
   "dependencies": {
     "@ant-design/charts": "^1.4.2",
@@ -43,6 +44,7 @@
     "cookie": "^0.5.0",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
+    "framer-motion": "^10.15.0",
     "jquery": "^3.7.0",
     "jsonwebtoken": "^9.0.1",
     "jss": "^10.10.0",

@@ -1,30 +1,34 @@
 import auth, { isOwner } from "@/utils/auth";
 import Order from "@/models/order";
 import type { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/utils/dbConnect";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  await dbConnect();
   const user = req.user.id;
-  const { menu } = req.query;
-  const isOwnerCheck = await isOwner(menu, user);
-  if (!isOwnerCheck) {
-    return res.status(401).json({
-      success: false,
-      message: "You are not allowed to get orders from this menu",
-    });
-  }
+  const { id } = req.query;
   switch (req.method) {
     case "GET":
       try {
         const order = await Order.findOne({
-          _id: menu,
-        });
-
-        res.status(201).json({
+          _id: id,
+        })
+          .populate("items.item", "name price")
+          .exec();
+        const isOwnerCheck = await isOwner(order.menu?.toString(), user);
+        if (!isOwnerCheck) {
+          return res.status(401).json({
+            success: false,
+            message: "You are not allowed to get orders from this menu",
+          });
+        }
+        return res.status(201).json({
           order,
           success: true,
         });
       } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
+          error,
           success: false,
           message: "Internal server error - Or menu not found",
         });
@@ -33,10 +37,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         const { status } = req.body;
         const index = ["قيد الانتظار", "ملغي", "مكتمل"].indexOf(status);
-        const variant = ["pending", "completed", "cancelled"][index];
+        const variant = ["pending", "cancelled", "completed"][index];
         const order = await Order.findOneAndUpdate(
           {
-            _id: menu,
+            _id: id,
           },
           {
             status,
@@ -61,7 +65,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           message: "Internal server error - Or menu not found",
         });
       }
-
+      break;
     default:
       return res.status(405).json({
         success: false,

@@ -2,7 +2,7 @@ import Head from "next/head";
 import { PageLayout } from "@/layouts";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { map } from "lodash";
+import { map, set } from "lodash";
 import moment from "@/utils/moment";
 import {
   Table,
@@ -15,9 +15,14 @@ import {
   Stack,
 } from "@mui/material";
 import { IconButton } from "@material-ui/core";
-import { DeleteIcon, EyeIcon } from "@/components/icons";
+import { EyeIcon } from "@/components/icons";
 import { StyledBadge } from "@/components/badges";
 import Link from "next/link";
+import axios from "axios";
+import useAuth from "@/hooks/useAuth";
+import { message } from "antd";
+import { TablePlaceHolder } from "@/components/skeletons";
+import { NoData } from "@/components/empty";
 interface Order {
   id: string;
   name: string;
@@ -27,50 +32,25 @@ interface Order {
 }
 
 export default function GetOrders() {
+  const { user } = useAuth({
+    redirectTo: "/auth/login",
+    redirectIfFound: false,
+  });
   const router = useRouter();
   const { id } = router.query;
-  const [orders, setOrders] = useState([]) as any;
+  const [orders, setOrders] = useState() as any;
 
   useEffect(() => {
-    //api call to get orders by menu id
-    setOrders([
-      {
-        id: "1",
-        name: "محمد",
-        status: "مكتمل",
-        time: Date.now(),
-        variant: "completed",
-      },
-      {
-        id: "1",
-        name: "محمد",
-        status: "مكتمل",
-        time: Date.now(),
-        variant: "completed",
-      },
-      {
-        id: "1",
-        name: "محمد",
-        status: "مكتمل",
-        time: Date.now(),
-        variant: "completed",
-      },
-      {
-        id: "1",
-        name: "محمد",
-        status: "مكتمل",
-        time: Date.now(),
-        variant: "completed",
-      },
-      {
-        id: "1",
-        name: "محمد",
-        status: "مكتمل",
-        time: Date.now(),
-        variant: "completed",
-      },
-    ]);
-  }, []);
+    if (!id) return;
+    axios
+      .get(`/api/menu/${id}/orders`)
+      .then((res) => {
+        setOrders(res.data?.orders);
+      })
+      .catch((err) => {
+        message.error("حدث خطأ أثناء جلب الطلبات");
+      });
+  }, [id]);
   return (
     <>
       <Head>
@@ -79,58 +59,63 @@ export default function GetOrders() {
       </Head>
       <PageLayout title="title.get-orders">
         <TableContainer component={Paper}>
-          <Table
-            aria-label="Orders table"
-            sx={{
-              minWidth: "100%",
-              direction: "rtl",
-              ":lang": {
-                direction: "rtl",
-              },
-            }}
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell>الطلب</TableCell>
-                <TableCell>المشتري</TableCell>
-                <TableCell>حالة الطلب</TableCell>
-                <TableCell>وقت الطلب</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {map(orders, (order: Order, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell>{index}</TableCell>
-                    <TableCell>{order.name}</TableCell>
-                    <TableCell>
-                      <StyledBadge type={order.variant}>
-                        {order.status}
-                      </StyledBadge>
-                    </TableCell>
-                    <TableCell>{moment(order.time).fromNow()}</TableCell>
-                    <TableCell
-                      sx={{
-                        float: "left",
-                      }}
-                    >
-                      <Stack direction="row" spacing={1}>
-                        <IconButton>
-                          <Link href={`/orders/${order.id}`}>
-                            <EyeIcon size={20} fill="#979797" />
-                          </Link>
-                        </IconButton>
-                        <IconButton>
-                          <DeleteIcon size={20} fill="#FF0080" />
-                        </IconButton>
-                      </Stack>
-                    </TableCell>
+          {orders ? (
+            orders.length > 0 ? (
+              <Table
+                aria-label="Orders table"
+                sx={{
+                  minWidth: "100%",
+                  direction: "rtl",
+                  ":lang": {
+                    direction: "rtl",
+                  },
+                }}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>الطلب</TableCell>
+                    <TableCell>المشتري</TableCell>
+                    <TableCell>حالة الطلب</TableCell>
+                    <TableCell>وقت الطلب</TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+                </TableHead>
+                <TableBody>
+                  {map(orders, (order: Order, index) => {
+                    return (
+                      <TableRow key={index}>
+                        <TableCell>{index}</TableCell>
+                        <TableCell>{order.name}</TableCell>
+                        <TableCell>
+                          <StyledBadge type={order.variant}>
+                            {order.status}
+                          </StyledBadge>
+                        </TableCell>
+                        <TableCell>{moment(order.time).fromNow()}</TableCell>
+                        <TableCell
+                          sx={{
+                            float: "left",
+                          }}
+                        >
+                          <Stack direction="row" spacing={1}>
+                            <IconButton>
+                              <Link href={`/orders/${order.id}`}>
+                                <EyeIcon size={20} fill="#979797" />
+                              </Link>
+                            </IconButton>
+                          </Stack>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            ) : (
+              <NoData description="لا توجد طلبات بعد" />
+            )
+          ) : (
+            <TablePlaceHolder />
+          )}
         </TableContainer>
       </PageLayout>
     </>

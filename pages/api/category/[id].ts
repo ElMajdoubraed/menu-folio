@@ -2,11 +2,12 @@ import auth, { isOwner } from "@/utils/auth";
 import Category from "@/models/category";
 import Item from "@/models/item";
 import type { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/utils/dbConnect";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  await dbConnect();
   const user = req.user.id;
-  const { menu } = req.body;
-  const { id } = req.query;
+  const { id, menu } = req.query;
   const isOwnerCheck = await isOwner(menu, user);
   if (!isOwnerCheck) {
     return res.status(401).json({
@@ -15,10 +16,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
   switch (req.method) {
-    case "DElETE":
+    case "DELETE":
       try {
         const category = await Category.findOneAndDelete({
           _id: id,
+          menu,
         });
         if (category) {
           await Item.deleteMany({
@@ -35,6 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           message: "Internal server error - Or menu not found",
         });
       }
+      break;
     case "PUT":
       try {
         const { name } = req.body;
@@ -64,7 +67,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           message: "Internal server error - Or menu not found",
         });
       }
-
+      break;
+    case "GET":
+      try {
+        const items = await Item.find({
+          category: id,
+        });
+        res.status(200).json({
+          items,
+          success: true,
+        });
+      } catch (error) {
+        res.status(500).json({
+          success: false,
+          message: "Internal server error - Or menu not found",
+        });
+      }
+      break;
     default:
       return res.status(405).json({
         success: false,

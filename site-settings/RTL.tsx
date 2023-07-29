@@ -6,7 +6,7 @@ interface RtlProps {
   children: React.ReactNode;
 }
 
-const jss: any = create({ plugins: [...jssPreset().plugins, rtl()] });
+const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 
 export default function RTL(props: RtlProps) {
   return <StylesProvider jss={jss}>{props.children}</StylesProvider>;

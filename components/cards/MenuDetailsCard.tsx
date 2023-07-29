@@ -1,23 +1,35 @@
 import React from "react";
 import { EditOutlined, QrcodeOutlined, DeleteFilled } from "@ant-design/icons";
 import { Avatar, Card, message } from "antd";
-import { Typography } from "@material-ui/core";
+import { Box, Typography, Button } from "@material-ui/core";
 import { useQRCode } from "next-qrcode";
-import { Button, Modal } from "@nextui-org/react";
+import { Modal, Button as BTN } from "@nextui-org/react";
 import $ from "jquery";
+import axios from "axios";
+import Link from "next/link";
+import { Stack } from "@mui/material";
+import { useRouter } from "next/router";
 
 const { Meta } = Card;
 
 const MenuDetailsCard = (props: any) => {
+  const router = useRouter();
+  const uploadUrl = process.env.NEXT_PUBLIC_S3_UPLOAD_URL;
   const { Canvas } = useQRCode();
 
   const [openModal, setOpenModal] = React.useState(false);
 
-  const updateHandler = () => {
-    console.log("i");
-  };
   const deleteHandler = () => {
-    console.log("i");
+    if (!window.confirm("هل انت متأكد من حذف القائمة؟")) return;
+    message.loading("جاري حذف القائمة");
+    axios
+      .delete("/api/menu/" + props.id)
+      .then((res: any) => {
+        message.success("تم حذف القائمة بنجاح");
+      })
+      .catch((e: any) => {
+        message.error("حدث خطأ أثناء حذف القائمة");
+      });
   };
 
   const donloadQRCode = () => {
@@ -34,7 +46,6 @@ const MenuDetailsCard = (props: any) => {
       $(downloadLink).remove();
       setOpenModal(false);
     } catch (error) {
-      console.error(error);
       message.error("حدث خطأ أثناء تحميل QR Code");
       setOpenModal(false);
     }
@@ -49,33 +60,67 @@ const MenuDetailsCard = (props: any) => {
             onClick={deleteHandler}
             key="Delete menu"
           />,
-          <EditOutlined title="Update menu" key="Edit menu" />,
+          <Link key="Edit menu" href={`/admin/update/${props.id}`}>
+            <EditOutlined title="Update menu" />
+          </Link>,
           <QrcodeOutlined
             onClick={() => setOpenModal(true)}
             title="Generate QR code"
             key="Generate QR code"
           />,
         ]}
+        title={
+          <Stack
+            sx={{
+              maxWidth: "100%",
+            }}
+            direction={"row"}
+            spacing={2}
+          >
+            <Button>
+              <Link href={`/menu/${props.id}/add-category`}>اضافة فئة</Link>
+            </Button>
+            <Box sx={{ flexGrow: 1 }} />
+            <Button>
+              <Link href={`/menu/${props.id}/update`}> تعديل العناصر</Link>
+            </Button>
+            <Box sx={{ flexGrow: 1 }} />
+            <Button>
+              <Link href={`/menu/${props.id}/add-item`}>اضافة عنصر</Link>
+            </Button>
+          </Stack>
+        }
+        hoverable
+        style={{ width: "100%" }}
       >
-        <Meta
-          avatar={<Avatar src={props.image} />}
-          title={props.name}
-          description={
-            <>
-              <Typography noWrap>{props.description}</Typography>
-              <Typography
-                align="right"
-                color="primary"
-                style={{
-                  marginTop: "1rem",
-                }}
-              >
-                {props.link}
-              </Typography>
-            </>
-          }
-        />
+        <Link
+          style={{
+            textDecoration: "none !important",
+          }}
+          href={`/menu/${props.id}`}
+        >
+          <Meta
+            avatar={<Avatar src={uploadUrl + "/" + props.image} />}
+            title={props.name}
+            description={
+              <>
+                <Typography noWrap>{props.description}</Typography>
+                <Typography
+                  align="right"
+                  color="primary"
+                  style={{
+                    marginTop: "1rem",
+                    fontSize: "0.8rem",
+                  }}
+                >
+                  Link : {props.link}
+                </Typography>
+              </>
+            }
+          />
+        </Link>
       </Card>
+
       <Modal
         closeButton
         aria-labelledby="modal-title"
@@ -92,7 +137,7 @@ const MenuDetailsCard = (props: any) => {
           }}
         >
           <Canvas
-            text={props.link}
+            text={"https://menu.elmajdoub.live" + props.link}
             logo={{
               src: "/images/qr-bg.jpg",
               options: {
@@ -112,9 +157,9 @@ const MenuDetailsCard = (props: any) => {
               },
             }}
           />
-          <Button onClick={donloadQRCode} color="gradient" bordered>
+          <BTN onClick={donloadQRCode} color="gradient" bordered>
             تحميل QR Code
-          </Button>
+          </BTN>
         </Modal.Body>
       </Modal>
     </>

@@ -8,22 +8,45 @@ import { map } from "lodash";
 import { ItemMenuCard } from "@/components/cards";
 import { DrawerComponent } from "@/components/navigation";
 import { PlaylistPlay } from "@mui/icons-material";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { message } from "antd";
 
 export default function Menu() {
+  const router = useRouter();
+  const { id } = router.query;
   const [open, setOpen] = React.useState(false) as any;
-  const [selected, setSelected] = React.useState("");
-  const [items, setItems] = React.useState([
-    {
-      name: "Kosksi",
-      price: 10,
-      image:
-        "https://www.tunisie.fr/wp-content/uploads/2020/11/couscous-aux-cardons-e1358522791731.jpg",
-      id: 1,
-    },
-  ]) as any;
+  const [selected, setSelected] = React.useState() as any;
+  const [categories, setCategories] = React.useState() as any;
+  const [items, setItems] = React.useState() as any;
 
-  const chooseItem = (item: any) => {
-    console.log(item);
+  React.useEffect(() => {
+    if (!id) return;
+    axios.get(`/api/menu/${id}/categories`).then((res) => {
+      setCategories(res.data?.categories);
+      if (res.data?.categories?.length > 0) {
+        setSelected(res.data?.categories[0]?.name);
+        const _id = res.data?.categories[0]?.id;
+        axios
+          .get(`/api/category/get/${_id}`)
+          .then((res) => {
+            setItems(res.data?.items);
+          })
+          .catch((err) => {
+            message.error("حدث خطأ ما");
+          });
+      }
+    });
+  }, [id]);
+  const chooseItem = async (item: any) => {
+    axios
+      .get(`/api/category/get/${item._id}`)
+      .then((res) => {
+        setItems(res.data?.items);
+      })
+      .catch((err) => {
+        message.error("حدث خطأ ما");
+      });
     setOpen(false);
   };
   return (
@@ -48,7 +71,7 @@ export default function Menu() {
             </Button>
             <DrawerComponent
               setSelected={setSelected}
-              items={items}
+              items={categories}
               chooseItem={chooseItem}
               open={open}
               setOpen={setOpen}
@@ -58,7 +81,7 @@ export default function Menu() {
             <Grid.Container gap={2} justify="flex-start">
               {map(items, (item: any, index: number) => (
                 <Grid xs={12} sm={4} md={4} key={index}>
-                  <ItemMenuCard {...item} />
+                  <ItemMenuCard menuId={id} {...item} />
                 </Grid>
               ))}
             </Grid.Container>

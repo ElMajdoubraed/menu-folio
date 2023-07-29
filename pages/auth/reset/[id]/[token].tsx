@@ -63,7 +63,7 @@ export default function Reset() {
         setValid(false);
       }
     }
-  }, [token]);
+  }, [token, id]);
 
   const onSubmit = async (event: any) => {
     event.preventDefault();

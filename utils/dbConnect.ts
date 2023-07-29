@@ -8,7 +8,7 @@ if (!MONGODB_URI) {
   );
 }
 
-let cached: any = global.mongoose;
+let cached = global.mongoose;
 
 if (!cached) {
   cached = global.mongoose = { conn: null, prmoise: null };

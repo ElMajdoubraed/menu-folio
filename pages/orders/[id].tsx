@@ -26,41 +26,73 @@ import { NoData } from "@/components/empty";
 import { TablePlaceHolder } from "@/components/skeletons";
 import { StyledBadge } from "@/components/badges";
 import moment from "@/utils/moment";
+import axios from "axios";
+import useAuth from "@/hooks/useAuth";
+import { message } from "antd";
 
 interface Order {
   name: string;
   totalPrice: number;
   status: string;
   variant: "pending" | "completed" | "cancelled";
-  time?: string | number;
+  createdAt?: string | number;
+  items: any[];
 }
 
+interface OrderDetails {
+  name: string;
+  quantity: number;
+  price: number;
+}
 export default function GetOrders() {
+  const { user } = useAuth({
+    redirectTo: "/auth/login",
+    redirectIfFound: false,
+  });
   const router = useRouter();
   const { id } = router.query;
-  const [orders, setOrders] = useState([]) as any;
-  const [orderDetails, setOrderDetails] = useState<Order>({
-    name: "raed elmajdoub",
-    totalPrice: 0,
-    status: "قيد المراجعة",
-    variant: "pending",
-    time: Date.now(),
-  });
+  const [orders, setOrders] = useState([]);
+  const [orderDetails, setOrderDetails] = useState<Order | undefined>();
+  const [status, setStatus] = useState("قيد الانتظار");
   useEffect(() => {
-    //api get order by id (setDetails, and set orders for items)
-    setOrders([
-      {
-        name: "منيو 1",
-        price: 10,
-        quantity: 2,
-      },
-      {
-        name: "منيو 2",
-        price: 10,
-        quantity: 2,
-      },
-    ]);
-  }, []);
+    if (!id) return;
+    axios
+      .get(`/api/order/${id}`)
+      .then((res) => {
+        setOrderDetails(res.data?.order);
+      })
+      .catch((err) => {
+        message.error("حدث خطأ ما");
+      });
+  }, [id]);
+
+  useEffect(() => {
+    if (!id || !orderDetails) return;
+    const items = orderDetails?.items;
+    const newItems: any = map(items, (_item: any) => {
+      return {
+        name: _item?.item?.name,
+        price: _item?.item?.price,
+        quantity: _item?.quantity,
+      };
+    });
+    setOrders(newItems);
+  }, [id, orderDetails]);
+
+  const updateOrderStatus = async () => {
+    if (!id || !status) return;
+    await axios
+      .put(`/api/order/${id}`, {
+        status,
+      })
+      .then((res) => {
+        message.success("تم تحديث حالة الطلب بنجاح");
+        window.location.reload();
+      })
+      .catch((err) => {
+        message.error("حدث خطأ ما");
+      });
+  };
   return (
     <>
       <Head>
@@ -76,20 +108,20 @@ export default function GetOrders() {
           }}
         >
           <Typography color="secondary">
-            مراجعة الطلب الوارد: {orderDetails.name}
+            مراجعة الطلب الوارد: {orderDetails?.name}
           </Typography>
           <Typography color="secondary"> </Typography>
           <Typography color="secondary">
-            السعر الجملي: {orderDetails.totalPrice}
+            السعر الجملي: {orderDetails?.totalPrice}
           </Typography>
           <Typography color="secondary">
             الحالة:
-            <StyledBadge type={orderDetails.variant}>
-              {orderDetails.status}
+            <StyledBadge type={orderDetails?.variant}>
+              {orderDetails?.status}
             </StyledBadge>
           </Typography>
           <Typography color="secondary">
-            الوقت: {moment(orderDetails.time).fromNow()}
+            الوقت: {moment(orderDetails?.createdAt).fromNow()}
           </Typography>
         </Stack>
         {orders ? (
@@ -115,7 +147,7 @@ export default function GetOrders() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {map(orders, (order: any, index) => {
+                    {map(orders, (order: OrderDetails, index) => {
                       return (
                         <TableRow key={index}>
                           <TableCell>{order.name}</TableCell>
@@ -139,7 +171,11 @@ export default function GetOrders() {
                 justifyContent={"center"}
               >
                 <Grid item xs={12} md={3}>
-                  <Button variant="contained" color="primary">
+                  <Button
+                    onClick={() => updateOrderStatus()}
+                    variant="contained"
+                    color="primary"
+                  >
                     حفظ التغييرات
                   </Button>
                 </Grid>
@@ -171,6 +207,7 @@ export default function GetOrders() {
                             }}
                           />
                         }
+                        onChange={() => setStatus("قيد الانتظار")}
                         label="قيد الانتظار"
                       />
                       <FormControlLabel
@@ -187,6 +224,7 @@ export default function GetOrders() {
                             }}
                           />
                         }
+                        onChange={() => setStatus("مكتمل")}
                         label="مكتمل"
                       />
                       <FormControlLabel
@@ -203,7 +241,8 @@ export default function GetOrders() {
                             }}
                           />
                         }
-                        label="ملغى"
+                        onChange={() => setStatus("ملغي")}
+                        label="ملغي"
                       />
                     </RadioGroup>
                   </FormControl>
