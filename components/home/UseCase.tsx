@@ -75,8 +75,8 @@ const UseCase = () => {
               sm={6}
               md={6}
             >
-              <Typography className="img__text">{use.title}</Typography>
-              <Typography className="img__text__description">
+              <Typography className="use__img__text">{use.title}</Typography>
+              <Typography className="use__img__text__description">
                 {use.description}
               </Typography>
               <Button variant="outlined" color="secondary">
@@ -99,8 +99,8 @@ const UseCase = () => {
               sm={6}
               md={6}
             >
-              <Typography className="img__text">{use.title}</Typography>
-              <Typography className="img__text__description">
+              <Typography className="use__img__text">{use.title}</Typography>
+              <Typography className="use__img__text__description">
                 {use.description}
               </Typography>
               <Button variant="outlined" color="secondary">

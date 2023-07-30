@@ -10,13 +10,29 @@
   margin-bottom: 15px;
 }
 
+.use__img__text {
+  font-size: 1.2rem !important;
+  font-weight: 500 !important;
+  color: #333d51 !important;
+}
+
+.use__img__text__description {
+  margin-top: 10px !important;
+  margin-bottom: 5rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  color: grey !important;
+}
+
 .img__text {
+  text-align: center;
   font-size: 1.2rem !important;
   font-weight: 500 !important;
   color: #333d51 !important;
 }
 
 .img__text__description {
+  text-align: center;
   margin-top: 10px !important;
   margin-bottom: 5rem !important;
   font-size: 0.9rem !important;
