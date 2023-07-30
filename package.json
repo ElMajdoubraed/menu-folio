@@ -19,7 +19,6 @@
     "@ant-design/charts": "^1.4.2",
     "@ant-design/plots": "^1.2.5",
     "@bradgarropy/next-seo": "^1.2.0",
-    "@builder.io/partytown": "^0.8.0",
     "@ckeditor/ckeditor5-build-classic": "^38.1.1",
     "@ckeditor/ckeditor5-react": "^6.1.0",
     "@emotion/react": "^11.11.1",
