@@ -8,7 +8,6 @@ import { message } from "antd";
 import { useEffect, useState } from "react";
 import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
-import { v4 as uuidv4 } from "uuid";
 import { uploadFile } from "@/hooks/useUpload";
 import axios from "axios";
 import useAuth from "@/hooks/useAuth";
