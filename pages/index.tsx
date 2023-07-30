@@ -1,6 +1,6 @@
 import { QrScanButton } from "@/components/button";
-import { Grid } from "@mui/material";
-import { Container, Typography } from "@material-ui/core";
+import { motion } from "framer-motion";
+import { Container } from "@material-ui/core";
 import Head from "next/head";
 import {
   FaqHome,
@@ -38,12 +38,65 @@ export default function Home() {
         <meta property="og:image" content="/icon-192x192.png" />
       </Head>
       <Container>
-        <MainHome />
-        <HowHome />
-        <UseCaseHome />
-        <WhyHome />
-        <FaqHome />
-        <StartNowHome />
+        <motion.section
+          initial={{
+            x: -200,
+            opacity: 0,
+          }}
+          whileInView={{
+            x: 0,
+            opacity: 1,
+          }}
+          viewport={{
+            once: true,
+          }}
+          transition={{
+            duration: 1.2,
+          }}
+          id="main-section"
+        >
+          <MainHome />
+        </motion.section>
+        <motion.section
+          id="how-section"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+        >
+          <HowHome />
+        </motion.section>
+        <motion.section
+          id="usecase-section"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+        >
+          <UseCaseHome />
+        </motion.section>
+        <motion.section
+          id="why-section"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+        >
+          <WhyHome />
+        </motion.section>
+        <motion.section
+          id="faq-section"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+        >
+          <FaqHome />
+        </motion.section>
+        <motion.section
+          id="start-section"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+        >
+          <StartNowHome />
+        </motion.section>
         <QrScanButton />
       </Container>
     </>

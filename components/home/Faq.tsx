@@ -18,7 +18,7 @@ interface FaqInterface {
 const Faq = () => {
   const [Faqs, setFaqs] = useState<FaqInterface[]>([]);
   const getFaqs = async () => {
-    const _faqs = await import("./faqs.json");
+    const _faqs = await import("./data/faqs.json");
     setFaqs(_faqs);
   };
   useEffect(() => {

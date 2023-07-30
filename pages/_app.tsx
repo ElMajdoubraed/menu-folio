@@ -1,6 +1,7 @@
 import React from "react";
 import SEO from "@bradgarropy/next-seo";
 import "@/styles/globals.css";
+import "@/styles/home.css";
 import type { AppProps } from "next/app";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
