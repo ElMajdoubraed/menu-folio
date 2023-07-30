@@ -38,7 +38,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <SEO
         title="قم بإنشاء قائمة الطعام خاصة بك على الإنترنت - MenuFolio"
-        description="MenuFolio هي أفضل طريقة لإنشاء قائمة الطعام خاصة بك على الإنترنت."
+        description="MenuFolio هي أفضل طريقة لإنشاء قائمة الطعام خاصة بك على الإنترنت. 
+        مع MenuFolio ، يمكنك إنشاء قائمة طعام رقمية جميلة ومخصصة لمطعمك أو مقهى أو مطعمك السريع أو مقهى الشاي و الحصول على رابط لمشاركتها على الإنترنت. أو QR Code لطباعتها على القائمة الورقية الخاصة بك. "
         keywords={[
           "menu",
           "menu-folio",
