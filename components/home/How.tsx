@@ -26,7 +26,7 @@ const HowComponent = () => {
         marginBottom: 50,
       }}
       container
-      spacing={4}
+      spacing={2}
     >
       <Grid
         style={{
@@ -38,7 +38,15 @@ const HowComponent = () => {
         sm={12}
         md={12}
       >
-        <Typography align="center" variant="h5" component="h5" gutterBottom>
+        <Typography
+          style={{
+            marginBottom: 30,
+          }}
+          align="center"
+          variant="h5"
+          component="h5"
+          gutterBottom
+        >
           كيف يساعدك MenuFolio
         </Typography>
       </Grid>
