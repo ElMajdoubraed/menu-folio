@@ -5,7 +5,7 @@ const nextConfig = {
   reactStrictMode: false,
   optimizeFonts: true,
   experimental: {
-    nextScriptWorkers: true,
+    nextScriptWorkers: false,
   },
   images: {
     domains: ["example.s3.us-west-2.amazonaws.com"],
