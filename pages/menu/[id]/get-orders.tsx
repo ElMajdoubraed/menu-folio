@@ -27,7 +27,7 @@ interface Order {
   id: string;
   name: string;
   status: "قيد الانتظار" | "مكتمل" | "ملغي";
-  time: string;
+  createdAt: string;
   variant: "completed" | "cancelled" | "pending";
 }
 
@@ -91,7 +91,9 @@ export default function GetOrders() {
                             {order.status}
                           </StyledBadge>
                         </TableCell>
-                        <TableCell>{moment(order.time).fromNow()}</TableCell>
+                        <TableCell>
+                          {moment(order.createdAt).fromNow()}
+                        </TableCell>
                         <TableCell
                           sx={{
                             float: "left",

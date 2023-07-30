@@ -1,20 +1,38 @@
 [
   {
-    "image": "/images/home/add_menu.png",
-    "title": "الاستخدام الشخصي",
-    "description": "خطط لما تريد القيام به في يومك سواء متابعة العمل على مهامك أو تدوين الملاحظات والأفكار.",
+    "image": "/images/home/get-orders.png",
+    "title": " أطلع على الطلبات",
+    "description": "اطلع على الطلبات الواردة و تحكم بكل طلب مع امكانية تغيير حالة الطلب.",
     "button": {
-      "title": "الملاحظات",
-      "link": "/notes"
+      "title": "الطلبات الواردة",
+      "link": "/menu/1/get-orders"
     }
   },
   {
-    "image": "/images/home/add_menu.png",
-    "title": "الموارد البشرية",
-    "description": "نظم مواعيد العمل وأدر عمليات تدريب وتطوير الموظفين بما يناسب احتاجات ونظام العمل في شركتك.",
+    "image": "/images/home/add-cat.png",
+    "title": " أضف فئة جديدة",
+    "description": "أضف فئة جديدة للمنتجات الخاصة بك.",
     "button": {
-      "title": "احتاجات",
-      "link": "/needs"
+      "title": "أضف فئة جديدة",
+      "link": "/menu/1/add-category"
+    }
+  },
+  {
+    "image": "/images/home/qr.png",
+    "title": "تحميل Qr Code",
+    "description": "قم بتحميل Qr Code الخاص بك ليتمكن العملاء من مسحه و الدخول الى قائمة المنتجات الخاصة بك.",
+    "button": {
+      "title": "تحميل Qr Code",
+      "link": "/dashboard"
+    }
+  },
+  {
+    "image": "/images/home/add-item.png",
+    "title": "أضافة عنصر الى القائمة",
+    "description": "أضف عنصر جديدة للقائمة الخاصة بك.",
+    "button": {
+      "title": "أضف عنصر ",
+      "link": "/menu/1/add-item"
     }
   }
 ]

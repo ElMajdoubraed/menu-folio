@@ -97,7 +97,7 @@ const MenuDetailsCard = (props: any) => {
           style={{
             textDecoration: "none !important",
           }}
-          href={`/menu/${props.id}`}
+          href={`/menu/${props.id}/get-orders`}
         >
           <Meta
             avatar={<Avatar src={uploadUrl + "/" + props.image} />}
