@@ -3,32 +3,30 @@ import { PageLayout } from "@/layouts";
 import { Grid, Avatar } from "@mui/material";
 import { FileInput, TextInput } from "@/components/inputs";
 import { blue } from "@mui/material/colors";
-import { Button, Select, MenuItem } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { message } from "antd";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import { useEffect, useState } from "react";
 import { Alert } from "@material-ui/lab";
-import map from "lodash/map";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
 import { uploadFile } from "@/hooks/useUpload";
 import axios from "axios";
 import useAuth from "@/hooks/useAuth";
 
-export default function AddItem() {
+export default function UpdateItem() {
+  const uploadUrl = process.env.NEXT_PUBLIC_S3_UPLOAD_URL;
   const { user } = useAuth({
     redirectTo: "/auth/login",
     redirectIfFound: false,
   });
   const router = useRouter();
   const { id } = router.query;
-  const [name, setName] = useState();
-  const [description, setDescription] = useState();
-  const [price, setPrice] = useState();
-  const [image, setImage] = useState();
-  const [imagePreview, setImagePreview] = useState();
-  const [category, setCategory] = useState();
-  const [listCategories, setListCategories] = useState([]) as any;
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(1);
+  const [image, setImage] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [item, setItem] = useState() as any;
   const [error, setError] = useState({
     message: "",
     exist: false,
@@ -37,34 +35,39 @@ export default function AddItem() {
   useEffect(() => {
     if (!id) return;
     axios
-      .get(`/api/menu/${id}/categories`)
+      .get(`/api/item/${id}/get`)
       .then((res) => {
-        setListCategories(res.data?.categories);
-        if (res.data?.categories?.length === 0) {
+        setItem(res.data?.item);
+        if (!res.data?.item) {
           setError({
-            message: "لا يمكنك اضافة عنصر جديد لانك لم تقم بانشاء فئة طعام بعد",
+            message: "لا يوجد عنصر بهذا الرقم",
             exist: true,
           });
+        } else {
+          setName(res.data?.item?.name);
+          setDescription(res.data?.item?.description);
+          setPrice(res.data?.item?.price);
+          setImagePreview(uploadUrl + "/" + res.data?.item?.image);
         }
       })
       .catch((e) => {
         setError({
           message:
-            "لا يمكنك اضافة عنصر جديد ربما لانك لم تقم بانشاء قائمة طعام بعد",
+            "لا تستطيع تعديل هذا العنصر ربما لانك لم تقم بانشاء قائمة طعام بعد",
           exist: true,
         });
       });
   }, [id]);
 
   const checkValidation = () => {
-    if (!name || !price || !image || !category) {
+    if (!name || !price) {
       setError({
         message: "يجب ادخال جميع الحقول",
         exist: true,
       });
       return false;
     }
-    if (price < 0) {
+    if (price <= 0) {
       setError({
         message: "يجب ادخال سعر صحيح",
         exist: true,
@@ -82,43 +85,39 @@ export default function AddItem() {
       }
     } catch (e) {}
   };
-  const AddItemHandler = async () => {
-    const selectedCategory = listCategories.find(
-      (item: any) => item.name === category
-    );
+  const UpdateItemHandler = async () => {
     if (!checkValidation()) return;
     message.loading("جاري اضافة العنصر");
-    const uuid = uuidv4();
-    await uploadFile(image, `menu/${id}/items/${uuid}${".png"}`);
+    const menuId = typeof item.menu === "string" ? item.menu : item.menu?.id;
     axios
-      .post("/api/item", {
+      .put(`/api/item/${id}?menu=${menuId}`, {
         name,
         description,
         price,
-        image: `menu/${id}/items/${uuid}${".png"}`,
-        category: selectedCategory._id,
-        menu: id,
       })
-      .then((res) => {
+      .then(async (res) => {
+        if (image && imagePreview != item.image)
+          await uploadFile(image, item.image);
         message.success("تم اضافة العنصر بنجاح");
-        router.push(`/menu/${id}`);
+        router.push(`/menu/${menuId}`);
       })
       .catch((e) => {
+        console.error(e);
         message.error("حدث خطأ ما");
       });
   };
   return (
     <>
       <Head>
-        <title>أضف عنصر جديد - MenuFolio</title>
-        <meta name="description" content="أضف عنصر جديد - MenuFolio" />
+        <title>تعديل عنصر - MenuFolio</title>
+        <meta name="description" content="تعديل عنصر  - MenuFolio" />
         <meta name="author" content="MenuFolio" />
         <meta
           name="keywords"
-          content="MenuFolio, Add, Create, Menu, Item, Food, Restaurant, Cafe, اضاقة, عنصر, طعام, جديدة"
+          content="MenuFolio, Update, Create, Menu, Item, Food, Restaurant, Cafe, تعديل, عنصر, طعام, جديدة"
         />
       </Head>
-      <PageLayout title="title.item">
+      <PageLayout title="title.item.update">
         {error.exist ? (
           <Alert
             style={{
@@ -136,8 +135,10 @@ export default function AddItem() {
             <TextInput
               label="اسم العنصر"
               name="name"
+              defaultValue={name}
+              value={name}
               required
-              onChange={setName}
+              onChange={(value: string) => setName(value)}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -145,6 +146,8 @@ export default function AddItem() {
               label="وصف العنصر"
               name="description"
               multiline
+              defaultValue={description}
+              value={description}
               required
               onChange={setDescription}
             />{" "}
@@ -152,37 +155,15 @@ export default function AddItem() {
           <Grid item xs={12} md={6}>
             <TextInput
               label="السعر"
-              defaultValue={0}
+              defaultValue={price}
+              value={price}
               name="price"
               type="number"
-              onChange={setPrice}
+              onChange={(value: string) => setPrice(parseInt(value))}
             />
           </Grid>
+
           <Grid item xs={12} md={6}>
-            <Select
-              fullWidth
-              input={<OutlinedInput />}
-              inputProps={{ "aria-label": "Without label" }}
-              displayEmpty
-              onChange={(event) => setCategory(event.target.value as any)}
-              renderValue={(selected) => {
-                if (!selected) {
-                  return <em>فئة العنصر *</em>;
-                }
-                return selected.toString();
-              }}
-            >
-              <MenuItem disabled value="">
-                <em>فئة العنصر</em>
-              </MenuItem>
-              {map(listCategories, (category, index) => (
-                <MenuItem key={index} id={category._id} value={category.name}>
-                  {category.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </Grid>
-          <Grid item xs={12} md={12}>
             <FileInput
               label="صورة العنصر"
               name="Image"
@@ -209,12 +190,11 @@ export default function AddItem() {
           </Grid>
           <Grid item xs={12} md={6}>
             <Button
-              disabled={error.exist}
-              onClick={AddItemHandler}
+              onClick={UpdateItemHandler}
               variant="contained"
               color="primary"
             >
-              اضافة عنصر
+              تعديل عنصر
             </Button>
           </Grid>
         </Grid>

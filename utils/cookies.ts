@@ -25,7 +25,6 @@ const cookie = (
 
   if ("maxAge" in options) {
     options.expires = new Date(Date.now() + options.maxAge);
-    options.maxAge /= 1000;
   }
   options.path = options?.path || "/";
 

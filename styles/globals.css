@@ -82,6 +82,12 @@ canvas {
   position: fixed !important;
   max-width: 100% !important;
 }
+
+.image__preview {
+  width: 200px !important;
+  height: 200px !important;
+  object-fit: cover !important;
+}
 @media only screen and (max-width: 900px) {
   * {
     max-width: 100% !important;

@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   switch (req.method) {
     case "PUT":
-      const { name, price, description, image } = req.body;
+      const { name, price, description } = req.body;
       await Item.findOneAndUpdate(
         {
           menu,
@@ -26,7 +26,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           name,
           price,
           description,
-          image,
         }
       );
 

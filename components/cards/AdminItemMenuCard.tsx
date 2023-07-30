@@ -6,6 +6,7 @@ import { Box, Container } from "@material-ui/core";
 import { DeleteIcon, EditIcon } from "../icons";
 import axios from "axios";
 import { message } from "antd";
+import router from "next/router";
 
 export default function AdminItemMenuCard({
   name,
@@ -44,7 +45,7 @@ export default function AdminItemMenuCard({
             <Box sx={{ flexGrow: 1 }} />
             <IconButton
               className="icon__btn"
-              onClick={() => console.log("update")}
+              onClick={() => router.push(`/menu/item/${id}`)}
             >
               <EditIcon size={20} fill="#3f50b5" />
             </IconButton>

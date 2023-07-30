@@ -10,14 +10,20 @@ import { PlaylistPlay } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { message } from "antd";
+import useAuth from "@/hooks/useAuth";
 
 export default function Menu() {
   const router = useRouter();
   const { id } = router.query;
+  const { user } = useAuth({
+    redirectTo: "/auth/login",
+    redirectIfFound: false,
+  });
   const [open, setOpen] = React.useState(false) as any;
   const [selected, setSelected] = React.useState("");
   const [items, setItems] = React.useState() as any;
   const [categories, setCategories] = React.useState() as any;
+  const [existUpdate, setExistUpdate] = React.useState(false);
 
   React.useEffect(() => {
     if (!id) return;
@@ -36,7 +42,7 @@ export default function Menu() {
           });
       }
     });
-  }, [id]);
+  }, [id, existUpdate]);
   const chooseItem = async (item: any) => {
     axios
       .get(`/api/category/get/${item._id}`)
@@ -75,6 +81,8 @@ export default function Menu() {
               chooseItem={chooseItem}
               open={open}
               setOpen={setOpen}
+              setExistUpdate={setExistUpdate}
+              existUpdate={existUpdate}
             />
           </Grid>
           <Grid xs={12} sm={9} md={9} key={"content"}>

@@ -1,12 +1,23 @@
-import { Box, Divider } from "@material-ui/core";
+import {
+  Box,
+  Dialog,
+  DialogTitle,
+  Divider,
+  DialogContent,
+  Button as MuiButton,
+} from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import { Close, Edit, Delete } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
 import { Button, Drawer, message } from "antd";
 import axios from "axios";
 import React from "react";
+import { TextInput } from "@/components/inputs";
 
 const AdminDrawerComponent = (props: any) => {
+  const [openUpdate, setOpenUpdate] = React.useState(false);
+  const [name, setName] = React.useState("");
+  const [id, setId] = React.useState<String | undefined>();
   const deleteHandler = (id: string) => {
     if (!id) return;
     if (!window.confirm("هل انت متأكد من حذف هذا التصنيف؟")) return;
@@ -15,14 +26,30 @@ const AdminDrawerComponent = (props: any) => {
       .delete(`/api/category/${id}?menu=${props.menuId}`)
       .then((res) => {
         message.success("تم حذف التصنيف بنجاح");
-        window.location.reload();
+        props.setExistUpdate(!props.existUpdate);
       })
       .catch((err) => {
         message.error("حدث خطأ أثناء حذف التصنيف");
       });
   };
-  const updateHandler = (id: string) => {
+  const updateHandler = (event: any) => {
+    event.preventDefault();
     if (!id) return;
+    if (!name) return message.error("يجب ادخال اسم التصنيف");
+    message.loading("جاري تعديل التصنيف");
+    axios
+      .put(`/api/category/${id}?menu=${props.menuId}`, {
+        name,
+      })
+      .then((res) => {
+        message.success("تم تعديل التصنيف بنجاح");
+        props.setExistUpdate(!props.existUpdate);
+        setOpenUpdate(false);
+      })
+      .catch((err) => {
+        message.error("حدث خطأ أثناء تعديل التصنيف");
+      });
+    event.target.reset();
   };
   return (
     <Drawer
@@ -77,7 +104,11 @@ const AdminDrawerComponent = (props: any) => {
               >
                 <IconButton
                   className="icon__btn"
-                  onClick={() => console.log("update")}
+                  onClick={() => {
+                    setOpenUpdate(true);
+                    setName(item.name);
+                    setId(item._id);
+                  }}
                 >
                   <Edit color="primary" fontSize="small" />
                 </IconButton>
@@ -111,6 +142,45 @@ const AdminDrawerComponent = (props: any) => {
           </React.Fragment>
         ))}
       </Box>
+      <Dialog open={openUpdate} onClose={() => setOpenUpdate(false)}>
+        <DialogTitle>تعديل التصنيف</DialogTitle>
+        <DialogContent>
+          <form onSubmit={updateHandler}>
+            <TextInput
+              label="اسم التصنيف"
+              required
+              variant="standard"
+              name="name"
+              value={name}
+              onChange={(value: string) => setName(value)}
+            />
+            <MuiButton
+              variant="contained"
+              type="submit"
+              color="primary"
+              style={{
+                marginTop: 10,
+                width: "100%",
+              }}
+            >
+              تعديل
+            </MuiButton>
+            <MuiButton
+              type="reset"
+              variant="outlined"
+              color="secondary"
+              style={{
+                marginTop: 10,
+                width: "100%",
+                float: "right",
+              }}
+              onClick={() => setOpenUpdate(false)}
+            >
+              إلغاء
+            </MuiButton>
+          </form>
+        </DialogContent>
+      </Dialog>
     </Drawer>
   );
 };
