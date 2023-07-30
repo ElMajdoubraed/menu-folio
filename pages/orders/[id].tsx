@@ -2,7 +2,7 @@ import Head from "next/head";
 import { PageLayout } from "@/layouts";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { map } from "lodash";
+import map from "lodash/map";
 import {
   Table,
   TableContainer,

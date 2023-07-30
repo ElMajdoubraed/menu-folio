@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { PageLayout } from "@/layouts";
 import { useEffect, useState } from "react";
-import { map } from "lodash";
+import map from "lodash/map";
 import { Grid } from "@mui/material";
 import { MenuDetailsCard } from "@/components/cards";
 import useAuth from "@/hooks/useAuth";

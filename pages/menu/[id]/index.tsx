@@ -4,7 +4,7 @@ import { OrderButton } from "@/components/button";
 import { PageLayout } from "@/layouts";
 import { Grid } from "@nextui-org/react";
 import { Button, Typography } from "@material-ui/core";
-import { map } from "lodash";
+import map from "lodash/map";
 import { ItemMenuCard } from "@/components/cards";
 import { DrawerComponent } from "@/components/navigation";
 import { PlaylistPlay } from "@mui/icons-material";

@@ -1,5 +1,5 @@
 import { Grid, Paper, Typography } from "@material-ui/core";
-import { map } from "lodash";
+import map from "lodash/map";
 import { useState, useEffect } from "react";
 interface WhyInterface {
   icon: string;

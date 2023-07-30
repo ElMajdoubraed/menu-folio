@@ -8,7 +8,7 @@ import { message } from "antd";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { useEffect, useState } from "react";
 import { Alert } from "@material-ui/lab";
-import { map } from "lodash";
+import map from "lodash/map";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
 import { uploadFile } from "@/hooks/useUpload";

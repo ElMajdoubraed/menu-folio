@@ -7,7 +7,7 @@ import {
   Divider,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { map } from "lodash";
+import map from "lodash/map";
 import { useEffect, useState } from "react";
 
 interface FaqInterface {

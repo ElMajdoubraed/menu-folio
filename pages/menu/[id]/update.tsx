@@ -3,7 +3,7 @@ import Head from "next/head";
 import { PageLayout } from "@/layouts";
 import { Grid } from "@nextui-org/react";
 import { Button, Typography } from "@material-ui/core";
-import { map } from "lodash";
+import map from "lodash/map";
 import { AdminItemMenuCard } from "@/components/cards";
 import { AdminDrawerComponent } from "@/components/navigation";
 import { PlaylistPlay } from "@mui/icons-material";

@@ -1,6 +1,6 @@
 import { Paper, Typography } from "@material-ui/core";
 import { Grid } from "@mui/material";
-import { map } from "lodash";
+import map from "lodash/map";
 import { useEffect, useState } from "react";
 interface HowInterface {
   icon: string;

@@ -4,6 +4,9 @@ const withPWA = require("next-pwa");
 const nextConfig = {
   reactStrictMode: false,
   optimizeFonts: true,
+  experimental: {
+    nextScriptWorkers: true,
+  },
   images: {
     domains: ["example.s3.us-west-2.amazonaws.com"],
     unoptimized: true,

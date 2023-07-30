@@ -1,6 +1,6 @@
 import { Grid, Typography, Button } from "@material-ui/core";
 import { Divider } from "antd";
-import { map } from "lodash";
+import map from "lodash/map";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 interface UseCaseInterface {
