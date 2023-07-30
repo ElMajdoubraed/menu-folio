@@ -1,4 +1,5 @@
 import { Button, Grid, Paper, Typography } from "@material-ui/core";
+import Link from "next/link";
 
 const StartNow = () => {
   return (
@@ -31,7 +32,7 @@ const StartNow = () => {
           component="h5"
           gutterBottom
         >
-          مستعد لإنجاز أعمالك وتحقيق أهدافك؟
+          مستعد لإنشاء قائمتك الخاصة؟
         </Typography>
       </Grid>
       <Grid
@@ -47,7 +48,7 @@ const StartNow = () => {
         md={12}
       >
         <Button color="primary" variant="contained">
-          start now
+          <Link href={"/admin/add"}>انشئ قائمتك الان</Link>
         </Button>
       </Grid>
     </Grid>

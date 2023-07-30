@@ -1,6 +1,21 @@
 import { Grid, Paper, Typography } from "@material-ui/core";
-
-const Why = () => {
+import { map } from "lodash";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+interface WhyInterface {
+  icon: string;
+  title: string;
+  description: string;
+}
+const WhyComponent = () => {
+  const [Why, setWhy] = useState<WhyInterface[]>([]);
+  const getWhy = async () => {
+    const _why = await import("./data/why.json");
+    setWhy(_why);
+  };
+  useEffect(() => {
+    getWhy();
+  }, []);
   return (
     <Grid
       id="why"
@@ -24,7 +39,7 @@ const Why = () => {
         md={12}
       >
         <Typography align="center" variant="h5" component="h5" gutterBottom>
-          لماذا تستخدم أنا في إدارة مشاريعك
+          لماذا تستخدم MenuFolio ؟
         </Typography>
         <Typography
           align="center"
@@ -35,29 +50,28 @@ const Why = () => {
             color: "#666",
           }}
         >
-          خصائص متقدمة لبناء سير العمل الذي تريده
+          MenuFolio هي أفضل طريقة لإنشاء قائمة خاصة بك على الإنترنت.
         </Typography>
       </Grid>
-      <Grid item xs={12} sm={6} md={4}>
-        image
-      </Grid>
-      <Grid item xs={12} sm={6} md={4}>
-        image
-      </Grid>
-      <Grid item xs={12} sm={6} md={4}>
-        image
-      </Grid>
-      <Grid item xs={12} sm={6} md={4}>
-        image
-      </Grid>
-      <Grid item xs={12} sm={6} md={4}>
-        image
-      </Grid>
-      <Grid item xs={12} sm={6} md={4}>
-        image
-      </Grid>
+      {map(Why, (why: WhyInterface, index: number) => {
+        return (
+          <Grid key={index} item xs={12} sm={6} md={4}>
+            <Image
+              className="center__img"
+              src={why.icon}
+              width={75}
+              height={75}
+              alt={why.title}
+            />
+            <Typography className="img__text">{why.title}</Typography>
+            <Typography className="img__text__description">
+              {why.description}
+            </Typography>
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };
 
-export default Why;
+export default WhyComponent;

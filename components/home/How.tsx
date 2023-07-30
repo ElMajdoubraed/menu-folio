@@ -8,11 +8,11 @@ interface HowInterface {
   title: string;
   description: string;
 }
-const How = () => {
+const HowComponent = () => {
   const [How, setHow] = useState<HowInterface[]>([]);
   const getHow = async () => {
-    const _faqs = await import("./data/how.json");
-    setHow(_faqs);
+    const _how = await import("./data/how.json");
+    setHow(_how);
   };
   useEffect(() => {
     getHow();
@@ -64,4 +64,4 @@ const How = () => {
   );
 };
 
-export default How;
+export default HowComponent;
