@@ -1,6 +1,5 @@
 import { Grid, Paper, Typography } from "@material-ui/core";
 import { map } from "lodash";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 interface WhyInterface {
   icon: string;
@@ -56,7 +55,7 @@ const WhyComponent = () => {
       {map(Why, (why: WhyInterface, index: number) => {
         return (
           <Grid key={index} item xs={12} sm={6} md={4}>
-            <Image
+            <img
               className="center__img"
               src={why.icon}
               width={75}

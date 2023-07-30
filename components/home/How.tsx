@@ -1,7 +1,6 @@
 import { Paper, Typography } from "@material-ui/core";
 import { Grid } from "@mui/material";
 import { map } from "lodash";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 interface HowInterface {
   icon: string;
@@ -46,7 +45,7 @@ const HowComponent = () => {
       {map(How, (how: HowInterface, index: number) => {
         return (
           <Grid key={index} item xs={12} sm={6} md={4}>
-            <Image
+            <img
               className="center__img"
               src={how.icon}
               width={75}
