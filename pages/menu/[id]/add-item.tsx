@@ -145,7 +145,6 @@ export default function AddItem() {
               label="وصف العنصر"
               name="description"
               multiline
-              required
               onChange={setDescription}
             />{" "}
           </Grid>

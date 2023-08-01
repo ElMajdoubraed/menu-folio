@@ -36,7 +36,7 @@ export default function Dashboard() {
             menus.length > 0 ? (
               map(menus, (menu, index) => {
                 return (
-                  <Grid item key={index} xs={12} md={4}>
+                  <Grid item key={index} xs={12} md={6} xl={4}>
                     <MenuDetailsCard
                       id={menu._id}
                       image={menu.logo}

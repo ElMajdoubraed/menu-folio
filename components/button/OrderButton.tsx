@@ -39,12 +39,7 @@ export default function OrderButton() {
   }, 1000);
   return (
     <AnimatedFab
-      style={{
-        position: "fixed",
-        bottom: "100px",
-        right: "100px",
-        zIndex: 100,
-      }}
+      className="fab__button"
       color="primary"
       aria-label="add"
       href="/orders/list"

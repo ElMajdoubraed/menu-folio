@@ -89,15 +89,9 @@ function UserMenu(user: any) {
 
   return (
     <div className="left">
-      <IconButton
-        aria-label="account of current user"
-        aria-controls="menu-appbar"
-        aria-haspopup="true"
-        onClick={handleMenu}
-        color="inherit"
-      >
+      <button id="menu_btn" onClick={handleMenu}>
         <Avatar>{currentUser?.name?.charAt(0).toUpperCase()}</Avatar>
-      </IconButton>
+      </button>
       <Menu
         id="menu-appbar"
         anchorEl={menu}

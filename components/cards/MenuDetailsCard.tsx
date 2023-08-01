@@ -74,18 +74,18 @@ const MenuDetailsCard = (props: any) => {
             sx={{
               maxWidth: "100%",
             }}
-            direction={"row"}
-            spacing={2}
+            direction={{ xs: "column", sm: "row" }}
+            spacing={0}
           >
-            <Button>
+            <Button className="responsive__btn">
               <Link href={`/menu/${props.id}/add-category`}>اضافة فئة</Link>
             </Button>
             <Box sx={{ flexGrow: 1 }} />
-            <Button>
+            <Button className="responsive__btn">
               <Link href={`/menu/${props.id}/update`}> تعديل العناصر</Link>
             </Button>
             <Box sx={{ flexGrow: 1 }} />
-            <Button>
+            <Button className="responsive__btn">
               <Link href={`/menu/${props.id}/add-item`}>اضافة عنصر</Link>
             </Button>
           </Stack>

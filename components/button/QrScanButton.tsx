@@ -51,12 +51,7 @@ export default function QrScanButton() {
     <>
       <Tooltip title="فحص QR Code" placement="top">
         <AnimatedFab
-          style={{
-            position: "fixed",
-            bottom: "100px",
-            right: "100px",
-            zIndex: 100,
-          }}
+          className="fab__button"
           color="primary"
           aria-label="فحص QR Code"
           href="#scan"

@@ -73,7 +73,6 @@ export default function AddCategory() {
                   label="وصف الفئة"
                   name="description"
                   multiline
-                  required
                   onChange={setDescription}
                 />{" "}
               </Grid>
