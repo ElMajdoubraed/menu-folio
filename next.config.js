@@ -3,6 +3,7 @@ const withPWA = require("next-pwa");
 
 const nextConfig = {
   reactStrictMode: false,
+  basePath: "/menu-folio",
   optimizeFonts: true,
   experimental: {
     nextScriptWorkers: false,
